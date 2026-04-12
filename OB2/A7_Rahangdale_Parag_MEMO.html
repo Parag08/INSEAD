@@ -638,12 +638,23 @@
       background: var(--accent-blue);
       opacity: 0.5;
     }
+
+    /* Color variants for problem cards */
+    .pc-mission .pc-label { color: #60a5fa; }
+    .pc-mission::after { background: #1d4ed8; }
+    
+    .pc-complexity .pc-label { color: #5eead4; }
+    .pc-complexity::after { background: #0f766e; }
+    
+    .pc-barrier .pc-label { color: #fca5a5; }
+    .pc-barrier::after { background: #c0392b; }
+
     .pc-label {
       font-size: var(--small-size);
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.12em;
-      color: var(--accent-blue);
+      margin-bottom: 0.2rem;
     }
     .pc-title {
       font-size: clamp(0.9rem, 1.2vw, 1.2rem);
@@ -1404,17 +1415,17 @@
       <div class="slide-eyebrow reveal">The Business Problem</div>
       <h2 class="slide-title reveal">The Problem Was<br>Never Technical</h2>
       <div class="problem-grid">
-        <div class="problem-card reveal-up">
+        <div class="problem-card pc-mission reveal-up">
           <div class="pc-label">The Mission</div>
           <div class="pc-title">Seamless Migration</div>
           <div class="pc-text">Enable VMware ESXi customers to move to AHV without downtime, reinstallation, or complex manual configuration.</div>
         </div>
-        <div class="problem-card reveal-up" style="transition-delay: 0.15s">
+        <div class="problem-card pc-complexity reveal-up" style="transition-delay: 0.15s">
           <div class="pc-label">The Complexity</div>
           <div class="pc-title">Massive Orchestration</div>
           <div class="pc-text">Required Core AHV, Networking, VMware, and Move teams to synchronize across kernel-level hooks and UI layers.</div>
         </div>
-        <div class="problem-card reveal-up" style="transition-delay: 0.3s">
+        <div class="problem-card pc-barrier reveal-up" style="transition-delay: 0.3s">
           <div class="pc-label">The Barrier</div>
           <div class="pc-title">Institutional Silos</div>
           <div class="pc-text">Chronic delays wasn't a technical failure—it was a failure to execute across rigid organizational boundaries.</div>
