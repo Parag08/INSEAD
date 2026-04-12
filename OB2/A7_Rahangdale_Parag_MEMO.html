@@ -217,104 +217,260 @@
     }
 
     /* ===========================================
-       SLIDE 1 — TITLE (Dark split panel)
+       SLIDE 1 — TITLE: Full-screen OrgDNA diagram
+       Three animated interconnected nodes as hero visual
        =========================================== */
     .title-slide {
-      background: var(--bg-dark);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-    }
-
-    .title-left {
-      padding: var(--slide-padding);
+      background: #050508;
+      position: relative;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      padding-bottom: clamp(2rem, 6vh, 5rem);
-      position: relative;
+    }
+
+    /* Subtle radial grid background */
+    .title-slide::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 60% 38%, rgba(26,86,219,0.07) 0%, transparent 55%),
+        radial-gradient(circle at 28% 62%, rgba(192,57,43,0.06) 0%, transparent 45%),
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: auto, auto, 60px 60px, 60px 60px;
+      pointer-events: none;
+    }
+
+    /* === OrgDNA Diagram Canvas — right 55% of screen === */
+    .orgdna-canvas {
+      position: absolute;
+      top: 0;
+      left: 45%;
+      right: 0;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       z-index: 1;
     }
 
-    .title-right {
-      background: var(--accent-blue);
+    .orgdna-diagram {
       position: relative;
-      overflow: hidden;
+      width: clamp(260px, 42vw, 560px);
+      height: clamp(240px, 38vh, 480px);
+    }
+
+    /* SVG connecting lines */
+    .orgdna-lines {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .dna-line {
+      stroke-dasharray: 6 4;
+      stroke-dashoffset: 0;
+      animation: flowLine 3s linear infinite;
+    }
+
+    @keyframes flowLine {
+      to { stroke-dashoffset: -40; }
+    }
+
+    /* Node base styles */
+    .dna-node {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: clamp(5px, 1vh, 9px);
+      transform: translate(-50%, -50%);
+    }
+
+    .dna-node-ring {
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    .title-right::before {
+    /* Outer pulse ring */
+    .dna-node-ring::before {
       content: '';
       position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 60%),
-        radial-gradient(ellipse at 20% 80%, rgba(0,0,0,0.3) 0%, transparent 60%);
+      border-radius: 50%;
+      animation: nodePulse 2.8s ease-in-out infinite;
+      opacity: 0;
     }
 
-    .title-right-inner {
+    @keyframes nodePulse {
+      0%   { transform: scale(1);   opacity: 0.5; }
+      100% { transform: scale(1.7); opacity: 0; }
+    }
+
+    .dna-node-dot {
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       position: relative;
-      z-index: 1;
-      text-align: center;
-      padding: var(--slide-padding);
+      z-index: 2;
     }
 
-    .course-badge {
-      display: inline-block;
-      color: rgba(255,255,255,0.7);
-      font-size: var(--small-size);
-      font-weight: 600;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      margin-bottom: clamp(0.75rem, 2vh, 1.5rem);
-    }
-
-    .org-label {
-      font-size: clamp(2.5rem, 8vw, 7rem);
+    .dna-node-dot span {
+      font-size: clamp(0.45rem, 0.85vw, 0.7rem);
       font-weight: 800;
-      color: rgba(255,255,255,0.12);
-      line-height: 1;
-      letter-spacing: -0.02em;
-      user-select: none;
+      letter-spacing: 0.05em;
+      text-align: center;
+      line-height: 1.2;
+      color: #fff;
+      padding: 0 4px;
+    }
+
+    .dna-node-label {
+      text-align: center;
+    }
+
+    .dna-label-title {
+      font-size: clamp(0.6rem, 1.1vw, 0.85rem);
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      line-height: 1.2;
+    }
+
+    .dna-label-sub {
+      font-size: clamp(0.5rem, 0.8vw, 0.65rem);
+      font-weight: 500;
+      opacity: 0.5;
+      line-height: 1.3;
+    }
+
+    /* === Node — Architecture (top, blue) === */
+    .node-arch {
+      top: 8%;
+      left: 50%;
+      animation: floatA 5s ease-in-out infinite;
+    }
+    @keyframes floatA {
+      0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+      50%       { transform: translate(-50%, -50%) translateY(-8px); }
+    }
+    .node-arch .dna-node-ring::before {
+      width: clamp(50px,8vw,90px); height: clamp(50px,8vw,90px);
+      border: 1.5px solid rgba(26,86,219,0.6);
+      animation-delay: 0s;
+    }
+    .node-arch .dna-node-dot {
+      width: clamp(56px,9vw,100px); height: clamp(56px,9vw,100px);
+      background: radial-gradient(135deg at 35% 35%, #2563eb, #1a40a8);
+      box-shadow: 0 0 clamp(12px,2.5vw,28px) rgba(26,86,219,0.5), inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+    .node-arch .dna-label-title { color: #93c5fd; }
+    .node-arch .dna-label-sub { color: rgba(147,197,253,0.55); }
+
+    /* === Node — Culture (bottom-left, warm red) === */
+    .node-cult {
+      top: 88%;
+      left: 18%;
+      animation: floatB 5.5s ease-in-out infinite;
+    }
+    @keyframes floatB {
+      0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+      50%       { transform: translate(-50%, -50%) translateY(-8px); }
+    }
+    .node-cult .dna-node-ring::before {
+      width: clamp(50px,8vw,90px); height: clamp(50px,8vw,90px);
+      border: 1.5px solid rgba(192,57,43,0.6);
+      animation-delay: 0.9s;
+    }
+    .node-cult .dna-node-dot {
+      width: clamp(56px,9vw,100px); height: clamp(56px,9vw,100px);
+      background: radial-gradient(135deg at 35% 35%, #dc2626, #9b1a1a);
+      box-shadow: 0 0 clamp(12px,2.5vw,28px) rgba(192,57,43,0.5), inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+    .node-cult .dna-label-title { color: #fca5a5; }
+    .node-cult .dna-label-sub { color: rgba(252,165,165,0.55); }
+
+    /* === Node — Power (bottom-right, teal) === */
+    .node-power {
+      top: 88%;
+      left: 82%;
+      animation: floatC 6s ease-in-out infinite;
+    }
+    @keyframes floatC {
+      0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+      50%       { transform: translate(-50%, -50%) translateY(-8px); }
+    }
+    .node-power .dna-node-ring::before {
+      width: clamp(50px,8vw,90px); height: clamp(50px,8vw,90px);
+      border: 1.5px solid rgba(13,148,136,0.6);
+      animation-delay: 1.8s;
+    }
+    .node-power .dna-node-dot {
+      width: clamp(56px,9vw,100px); height: clamp(56px,9vw,100px);
+      background: radial-gradient(135deg at 35% 35%, #0f9688, #0a5e57);
+      box-shadow: 0 0 clamp(12px,2.5vw,28px) rgba(13,148,136,0.5), inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+    .node-power .dna-label-title { color: #5eead4; }
+    .node-power .dna-label-sub { color: rgba(94,234,212,0.55); }
+
+    /* === Title text block (bottom-left)  === */
+    .title-text-block {
+      position: relative;
+      z-index: 2;
+      padding: var(--slide-padding);
+      padding-top: 0;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(0.3rem, 0.8vh, 0.65rem);
+      max-width: 55%;
     }
 
     .title-eyebrow {
       font-size: var(--small-size);
       font-weight: 700;
-      letter-spacing: 0.2em;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
       color: var(--accent-blue);
-      margin-bottom: clamp(0.5rem, 1.5vh, 1rem);
     }
 
     .title-main {
-      font-size: var(--title-size);
+      font-size: clamp(2rem, 5.5vw, 4.5rem);
       font-weight: 800;
       color: var(--text-light);
-      line-height: 1.1;
-      letter-spacing: -0.02em;
-      margin-bottom: clamp(0.5rem, 1.5vh, 1rem);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
     }
 
     .title-sub {
       font-size: var(--h3-size);
       font-weight: 400;
-      color: rgba(255,255,255,0.55);
+      color: rgba(255,255,255,0.45);
       line-height: 1.4;
-      margin-bottom: clamp(1rem, 3vh, 2.5rem);
+      margin-top: clamp(0.1rem, 0.4vh, 0.3rem);
     }
 
     .title-meta {
       display: flex;
-      flex-direction: column;
-      gap: clamp(2px, 0.4vh, 5px);
+      align-items: center;
+      gap: clamp(0.5rem, 1.5vw, 1.2rem);
+      margin-top: clamp(0.5rem, 1.5vh, 1.2rem);
+      flex-wrap: wrap;
     }
 
     .title-meta span {
       font-size: var(--small-size);
-      color: rgba(255,255,255,0.35);
+      color: rgba(255,255,255,0.25);
       font-weight: 500;
+    }
+
+    .title-meta-sep {
+      color: rgba(255,255,255,0.1) !important;
     }
 
     /* ===========================================
@@ -1115,24 +1271,79 @@
   <div class="keyboard-hint">↑ ↓ Arrow Keys or Scroll to Navigate</div>
 
   <!-- ==========================================
-       SLIDE 1 — TITLE
+       SLIDE 1 — TITLE: Full-screen OrgDNA diagram
        ========================================== -->
   <section class="slide title-slide" id="slide-1" aria-label="Title slide">
-    <div class="title-left">
-      <div class="title-eyebrow reveal">Organizational Behavior II — Final Memo</div>
+
+    <!-- OrgDNA animated diagram as hero -->
+    <div class="orgdna-canvas">
+      <div class="orgdna-diagram">
+
+        <!-- SVG connecting lines between nodes -->
+        <svg class="orgdna-lines" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <!-- Arch (50,8) → Culture (18,88) -->
+          <line class="dna-line" x1="50" y1="12" x2="21" y2="83"
+            stroke="rgba(26,86,219,0.35)" stroke-width="0.6"/>
+          <!-- Arch (50,8) → Power (82,88) -->
+          <line class="dna-line" x1="50" y1="12" x2="79" y2="83"
+            stroke="rgba(13,148,136,0.35)" stroke-width="0.6"
+            style="animation-delay:-1.5s"/>
+          <!-- Culture (18,88) → Power (82,88) -->
+          <line class="dna-line" x1="22" y1="88" x2="78" y2="88"
+            stroke="rgba(192,57,43,0.3)" stroke-width="0.6"
+            style="animation-delay:-3s"/>
+        </svg>
+
+        <!-- Node 1: Architecture (top centre) -->
+        <div class="dna-node node-arch reveal-scale">
+          <div class="dna-node-ring">
+            <div class="dna-node-dot"><span></span></div>
+          </div>
+          <div class="dna-node-label">
+            <div class="dna-label-title">Architecture</div>
+            <div class="dna-label-sub">Structure &amp; Incentives</div>
+          </div>
+        </div>
+
+        <!-- Node 2: Culture (bottom-left) -->
+        <div class="dna-node node-cult reveal-scale">
+          <div class="dna-node-label" style="order:-1">
+            <div class="dna-label-title">Culture</div>
+            <div class="dna-label-sub">Habits &amp; Assumptions</div>
+          </div>
+          <div class="dna-node-ring">
+            <div class="dna-node-dot"><span></span></div>
+          </div>
+        </div>
+
+        <!-- Node 3: Power (bottom-right) -->
+        <div class="dna-node node-power reveal-scale">
+          <div class="dna-node-label" style="order:-1">
+            <div class="dna-label-title">Power &amp; Influence</div>
+            <div class="dna-label-sub">Networks &amp; Politics</div>
+          </div>
+          <div class="dna-node-ring">
+            <div class="dna-node-dot"><span></span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Title text anchored bottom-left -->
+    <div class="title-text-block">
+      <div class="title-eyebrow reveal">OB2 Final Memo · Section A7</div>
       <h1 class="title-main reveal">Scaling Without<br>Fracturing</h1>
-      <p class="title-sub reveal">Why Four Teams Couldn't Build<br>One Tool at Nutanix</p>
+      <p class="title-sub reveal">Why four teams couldn't build one tool at Nutanix — an OrgDNA analysis</p>
       <div class="title-meta reveal">
-        <span>Parag Rahangdale · INSEAD MBA · Class 26D</span>
-        <span>Section A7 · OrgDNA Framework</span>
+        <span>Parag Rahangdale</span>
+        <span class="title-meta-sep">·</span>
+        <span>INSEAD MBA Class 26D</span>
+        <span class="title-meta-sep">·</span>
+        <span>OrgDNA Framework</span>
       </div>
     </div>
-    <div class="title-right">
-      <div class="title-right-inner">
-        <div class="course-badge reveal">An OrgDNA Analysis</div>
-        <div class="org-label reveal-scale">ORG<br>DNA</div>
-      </div>
-    </div>
+
   </section>
 
   <!-- ==========================================
