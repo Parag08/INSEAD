@@ -475,7 +475,22 @@
     .slide-dark {
       background: var(--bg-dark);
       color: var(--text-light);
+      position: relative;
+      overflow: hidden;
     }
+    /* Blue ambient hue for all generic dark slides */
+    .slide-dark::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 15% 50%, rgba(26,86,219,0.12) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 20%, rgba(26,86,219,0.07) 0%, transparent 45%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .slide-dark .slide-content,
+    .slide-dark .slide-header { position: relative; z-index: 1; }
 
     .slide-dark .slide-content {
       padding: var(--slide-padding);
@@ -682,13 +697,15 @@
       position: relative;
       overflow: hidden;
     }
+    /* Stakes slide — blue hue (user request) */
     .stakes-slide::before {
       content: '';
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(ellipse at 70% 50%, rgba(192,57,43,0.18) 0%, transparent 55%),
-        radial-gradient(ellipse at 20% 80%, rgba(180,83,9,0.12) 0%, transparent 50%);
+        radial-gradient(ellipse at 70% 50%, rgba(192,57,43,0.14) 0%, transparent 50%),
+        radial-gradient(ellipse at 20% 80%, rgba(180,83,9,0.10) 0%, transparent 45%),
+        radial-gradient(ellipse at 10% 20%, rgba(26,86,219,0.18) 0%, transparent 50%);
       animation: stakesGlow 6s ease-in-out infinite alternate;
     }
     @keyframes stakesGlow { from { opacity: 0.7; } to { opacity: 1; } }
@@ -937,6 +954,8 @@
     .analysis-slide {
       display: grid;
       grid-template-columns: 1fr 1fr;
+      position: relative;
+      overflow: hidden;
     }
 
     .analysis-left {
@@ -949,6 +968,8 @@
       overflow: hidden;
     }
 
+
+    /* Base analysis right panel layout (restored) */
     .analysis-right {
       padding: var(--slide-padding);
       display: flex;
@@ -956,6 +977,33 @@
       justify-content: center;
       gap: var(--element-gap);
       overflow: hidden;
+    }
+
+    /* Per-dimension ambient hue on analysis right panel */
+
+    /* Architecture (slide-5): blue */
+    #slide-5 .analysis-right {
+      background: radial-gradient(ellipse at 70% 40%, rgba(26,86,219,0.14) 0%, transparent 60%),
+                  radial-gradient(ellipse at 30% 80%, rgba(26,86,219,0.08) 0%, transparent 50%);
+    }
+    #slide-5 .analysis-left {
+      background: radial-gradient(ellipse at 0% 50%, rgba(26,86,219,0.1) 0%, transparent 60%), var(--bg-dark);
+    }
+    /* Culture (slide-6): warm red */
+    #slide-6 .analysis-right {
+      background: radial-gradient(ellipse at 70% 40%, rgba(192,57,43,0.16) 0%, transparent 60%),
+                  radial-gradient(ellipse at 20% 80%, rgba(220,38,38,0.08) 0%, transparent 50%);
+    }
+    #slide-6 .analysis-left {
+      background: radial-gradient(ellipse at 0% 50%, rgba(192,57,43,0.12) 0%, transparent 60%), var(--bg-dark);
+    }
+    /* Power (slide-7): teal */
+    #slide-7 .analysis-right {
+      background: radial-gradient(ellipse at 70% 40%, rgba(13,148,136,0.16) 0%, transparent 60%),
+                  radial-gradient(ellipse at 20% 80%, rgba(13,148,136,0.08) 0%, transparent 50%);
+    }
+    #slide-7 .analysis-left {
+      background: radial-gradient(ellipse at 0% 50%, rgba(13,148,136,0.12) 0%, transparent 60%), var(--bg-dark);
     }
 
     .ar-architecture { background: #111827; }
@@ -1358,8 +1406,9 @@
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(ellipse at 30% 60%, rgba(26,86,219,0.12) 0%, transparent 55%),
-        radial-gradient(ellipse at 70% 30%, rgba(192,57,43,0.08) 0%, transparent 55%);
+        radial-gradient(ellipse at 25% 65%, rgba(26,86,219,0.18) 0%, transparent 50%),
+        radial-gradient(ellipse at 75% 35%, rgba(192,57,43,0.12) 0%, transparent 45%),
+        radial-gradient(ellipse at 50% 90%, rgba(13,148,136,0.1) 0%, transparent 45%);
     }
 
     .conclusion-inner {
