@@ -124,7 +124,7 @@ Phase 3 is 'Institutionalise & Reward.' We revised the incentive structures so t
 **(8:30 - 9:00 | 30 seconds)**
 "With any structural change, there are risks. 
 
-The highest likelihood risk is resistance from Functional VPs over a perceived loss of autonomy. To mitigate this, we employ 'agenda-linking.' We frame the shared squad model not as a loss of control, but as a protective measure to shield their individual teams from reputation damage and blame-shifting when projects fail."
+The highest likelihood risk is that VP alignment deteriorates under pressure, and leaders revert to functional protectionism to save their own metrics. To mitigate this, the CTO must strictly track the new Shared OKRs as the primary component of those VPs' own performance reviews. We can't just change the engineers' incentives; we must change the executives' incentives too."
 
 *(Advance to Slide 12)*
 
