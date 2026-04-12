@@ -845,56 +845,85 @@
       background: var(--bg-dark);
     }
 
-    .team-table {
-      width: 100%;
-      border-collapse: separate;
-      border-spacing: 0 clamp(3px, 0.5vh, 6px);
+    .team-conflict-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: clamp(1rem, 2vw, 2rem);
       margin-top: var(--content-gap);
+      align-items: center;
     }
 
-    .team-table th {
-      font-size: var(--label-size);
-      font-weight: 700;
-      letter-spacing: 0.15em;
+    .tc-functional {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(0.5rem, 1vh, 1rem);
+    }
+    
+    .tc-col-title {
+      font-size: clamp(0.85rem, 1.1vw, 1rem);
+      font-weight: 800;
+      color: rgba(255,255,255,0.8);
+      margin-bottom: 0.5rem;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.3);
-      text-align: left;
-      padding-bottom: clamp(4px, 0.8vh, 8px);
-      padding-left: clamp(0.6rem, 1.2vw, 1rem);
+      letter-spacing: 0.1em;
+      line-height: 1.3;
     }
 
-    .team-table td {
-      font-size: var(--body-size);
-      color: rgba(255,255,255,0.75);
-      padding: clamp(0.5rem, 1.2vh, 0.9rem) clamp(0.6rem, 1.2vw, 1rem);
-      background: rgba(255,255,255,0.04);
-      line-height: 1.4;
+    .tc-card {
+      padding: clamp(0.8rem, 1.5vh, 1.2rem) clamp(1rem, 2vw, 1.5rem);
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      position: relative;
     }
 
-    .team-table tr td:first-child {
-      border-radius: 6px 0 0 6px;
-      font-weight: 700;
+    .tc-highlight {
+      background: rgba(26,86,219,0.1);
+      border-color: rgba(26,86,219,0.4);
+    }
+
+    .tc-name {
+      font-size: clamp(0.9rem, 1.2vw, 1.1rem);
+      font-weight: 800;
       color: var(--text-light);
+      margin-bottom: 0.3rem;
     }
 
-    .team-table tr td:last-child {
-      border-radius: 0 6px 6px 0;
-    }
-
-    .team-table tr.highlight-row td {
-      background: rgba(26,86,219,0.18);
-    }
-
-    .team-table tr.highlight-row td:first-child {
+    .tc-highlight .tc-name {
       color: #93c5fd;
     }
 
-    .table-insight {
-      margin-top: var(--element-gap);
+    .tc-kpi {
       font-size: var(--small-size);
-      color: rgba(255,255,255,0.4);
-      font-style: italic;
-      text-align: right;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 0.4rem;
+      line-height: 1.3;
+    }
+
+    .tc-action {
+      font-size: clamp(0.7rem, 0.9vw, 0.85rem);
+      color: #fca5a5;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .tc-highlight .tc-action {
+      color: #93c5fd;
+    }
+
+    .tc-connector {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.3);
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      gap: 1rem;
+      text-align: center;
     }
 
     /* ===========================================
@@ -1707,37 +1736,41 @@
     <div class="slide-content">
       <div class="slide-eyebrow reveal">The Cast</div>
       <h2 class="slide-title reveal">One Product. Four Owners.<br>Zero Shared North Star.</h2>
-      <table class="team-table reveal">
-        <thead>
-          <tr>
-            <th>Team</th>
-            <th>Role in Project</th>
-            <th>Primary KPI</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Core AHV</td>
-            <td>Hypervisor host compatibility &amp; kernel-level conversion</td>
-            <td>AHV stability &amp; uptime</td>
-          </tr>
-          <tr>
-            <td>Networking</td>
-            <td>VM network continuity during live conversion</td>
-            <td>Zero packet-loss SLA</td>
-          </tr>
-          <tr>
-            <td>VMware Hypervisor</td>
-            <td>Source-system understanding &amp; ESXi hooks</td>
-            <td>VMware feature parity</td>
-          </tr>
-          <tr class="highlight-row">
-            <td>Move (my team)</td>
-            <td>Migration orchestration, UX &amp; end-to-end delivery</td>
-            <td>Feature delivery velocity</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="team-conflict-grid reveal">
+        <div class="tc-functional">
+          <div class="tc-col-title">The Functional Silos<br><span style="font-size:0.6em;color:var(--accent-warm)">Prioritizing isolated stability</span></div>
+          <div class="tc-card">
+            <div class="tc-name">Core AHV Team</div>
+            <div class="tc-kpi">KPI: Keep AHV strictly stable &amp; launch native features</div>
+            <div class="tc-action">→ Pushed away orchestration responsibility</div>
+          </div>
+          <div class="tc-card">
+            <div class="tc-name">Networking Team</div>
+            <div class="tc-kpi">KPI: Build NSX parity features &amp; meet zero-packet-loss SLAs</div>
+            <div class="tc-action">→ Denied ownership of complex cross-node routing</div>
+          </div>
+          <div class="tc-card">
+            <div class="tc-name">Uhura (ESXi) Team</div>
+            <div class="tc-kpi">KPI: Fix ESXi bug reports &amp; maintain generic platform stability</div>
+            <div class="tc-action">→ Viewed migration as "just another workload" — not their problem</div>
+          </div>
+        </div>
+        
+        <div class="tc-connector">
+           <div class="tc-arrow">↑</div>
+           <div>Zero Shared<br>North Star</div>
+           <div class="tc-arrow">↓</div>
+        </div>
+
+        <div class="tc-orchestrator">
+          <div class="tc-col-title" style="color:#93c5fd">The Orchestrator<br><span style="font-size:0.6em;color:rgba(255,255,255,0.4)">Pushing the boulder uphill</span></div>
+          <div class="tc-card tc-highlight">
+            <div class="tc-name">Move Team (My Team)</div>
+            <div class="tc-kpi">KPI: Delivery velocity of end-to-end migration tool</div>
+            <div class="tc-action">→ Attempted to coordinate all teams, but lacked the formal authority to force prioritization</div>
+          </div>
+        </div>
+      </div>
       <p class="table-insight reveal">Each team was measured on <em>their</em> outcome — not the <em>customer's</em> outcome.</p>
     </div>
   </section>
