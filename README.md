@@ -21,6 +21,8 @@ The project is organized by course modules to ensure easy navigation and version
 ### Organizational Behavior 2 (OB2)
 Focuses on the dynamics of organizations, leadership, and group behavior within a professional context.
 
+- **[🖥️ View OB2 Final Video Memo Presentation](https://parag08.github.io/INSEAD/OB2/A7_Rahangdale_Parag_MEMO.html)**
+
 ---
 
 ## 🛠 Workflow & Usage
