@@ -34,15 +34,13 @@ But the real barrier wasn't technical. Despite having top-tier talent, the proje
 
 ---
 
-### [Slide 4: Four Teams, One Flow]
+### [Slide 4: One Product, Four Owners]
 **(2:00 - 2:30 | 30 seconds)**
-"The product workflow crossed through four entirely separate functional pillars.
-- The Core Platform team ingested the data.
-- The AHV & Networking team deployed the hypervisor.
-- Edge Storage committed the data blocks.
-- And the UX team created the customer's interface.
+"Our product required deep integration across four distinct teams, but we had zero shared North Star. 
 
-Each of these teams was a center of excellence. Individually, they wrote beautiful code. But collectively, the product was entirely broken."
+On one side, you had three deep functional silos: The Core AHV Team, the Networking Team, and the Uhura ESXi team. Their KPIs were entirely inwardly focused—building native features and maintaining raw stability. Because of this, they pushed away orchestration responsibility, denied ownership of cross-node routing, and viewed migration as 'just another workload.'
+
+On the other side was my team, the Move Team. We were the Orchestrators. Our sole KPI was end-to-end delivery velocity. We were attempting to push the boulder uphill and coordinate all teams, but we lacked the formal authority to force prioritization. Every team was measured on *their* outcome—not the *customer's* outcome."
 
 *(Advance to Slide 5)*
 
