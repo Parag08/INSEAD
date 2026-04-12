@@ -1,0 +1,1655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scaling Without Fracturing — Nutanix OrgDNA Analysis | A7 Rahangdale Parag</title>
+  <!-- Fonts: Manrope from Google Fonts (Electric Studio preset) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ===========================================
+       CSS CUSTOM PROPERTIES — Electric Studio Preset
+       Adapted for MBA/institutional professional aesthetic
+       =========================================== */
+    :root {
+      /* Core palette */
+      --bg-dark: #0a0a0a;
+      --bg-white: #ffffff;
+      --accent-blue: #1a56db;
+      --accent-warm: #c0392b;
+      --text-dark: #0a0a0a;
+      --text-light: #ffffff;
+      --text-muted: #6b7280;
+      --text-muted-dark: #9ca3af;
+      --border-light: rgba(0,0,0,0.08);
+      --border-dark: rgba(255,255,255,0.1);
+
+      /* Typography — Manrope throughout */
+      --font-main: 'Manrope', sans-serif;
+
+      /* Spacing & sizing — all clamp() */
+      --slide-padding: clamp(1.5rem, 4vw, 5rem);
+      --content-gap: clamp(0.75rem, 2vw, 2rem);
+      --element-gap: clamp(0.3rem, 0.8vw, 0.75rem);
+      --title-size: clamp(1.75rem, 5vw, 4rem);
+      --h2-size: clamp(1.25rem, 3vw, 2.25rem);
+      --h3-size: clamp(0.95rem, 2vw, 1.4rem);
+      --body-size: clamp(0.72rem, 1.3vw, 1rem);
+      --small-size: clamp(0.6rem, 0.9vw, 0.8rem);
+      --label-size: clamp(0.55rem, 0.8vw, 0.7rem);
+
+      /* Animation */
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --duration-normal: 0.65s;
+    }
+
+    /* ===========================================
+       BASE RESET
+       =========================================== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* ===========================================
+       VIEWPORT-BASE.CSS — Mandatory base styles
+       =========================================== */
+    html, body {
+      height: 100%;
+      overflow-x: hidden;
+      font-family: var(--font-main);
+    }
+
+    html {
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
+    }
+
+    .slide {
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      scroll-snap-align: start;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .slide-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      max-height: 100%;
+      overflow: hidden;
+      padding: var(--slide-padding);
+    }
+
+    img, .image-container {
+      max-width: 100%;
+      max-height: min(50vh, 400px);
+      object-fit: contain;
+    }
+
+    @media (max-height: 700px) {
+      :root {
+        --slide-padding: clamp(0.75rem, 3vw, 2rem);
+        --content-gap: clamp(0.4rem, 1.5vw, 1rem);
+        --title-size: clamp(1.25rem, 4.5vw, 2.5rem);
+        --h2-size: clamp(1rem, 3vw, 1.75rem);
+      }
+    }
+
+    @media (max-height: 600px) {
+      :root {
+        --slide-padding: clamp(0.5rem, 2.5vw, 1.5rem);
+        --content-gap: clamp(0.3rem, 1vw, 0.75rem);
+        --title-size: clamp(1.1rem, 4vw, 2rem);
+        --body-size: clamp(0.65rem, 1.2vw, 0.9rem);
+      }
+      .nav-dots, .keyboard-hint, .decorative { display: none; }
+    }
+
+    @media (max-height: 500px) {
+      :root {
+        --slide-padding: clamp(0.4rem, 2vw, 1rem);
+        --title-size: clamp(1rem, 3.5vw, 1.5rem);
+        --h2-size: clamp(0.9rem, 2.5vw, 1.25rem);
+        --body-size: clamp(0.6rem, 1vw, 0.82rem);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.2s !important;
+      }
+      html { scroll-behavior: auto; }
+    }
+
+    /* ===========================================
+       ANIMATIONS — Staggered slide-in reveals
+       =========================================== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition:
+        opacity var(--duration-normal) var(--ease-out-expo),
+        transform var(--duration-normal) var(--ease-out-expo);
+    }
+
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-30px);
+      transition:
+        opacity var(--duration-normal) var(--ease-out-expo),
+        transform var(--duration-normal) var(--ease-out-expo);
+    }
+
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(0.92);
+      transition:
+        opacity 0.5s var(--ease-out-expo),
+        transform 0.5s var(--ease-out-expo);
+    }
+
+    .slide.visible .reveal,
+    .slide.visible .reveal-left,
+    .slide.visible .reveal-scale { opacity: 1; transform: none; }
+
+    /* Stagger delays */
+    .reveal:nth-child(1), .reveal-left:nth-child(1), .reveal-scale:nth-child(1) { transition-delay: 0.05s; }
+    .reveal:nth-child(2), .reveal-left:nth-child(2), .reveal-scale:nth-child(2) { transition-delay: 0.15s; }
+    .reveal:nth-child(3), .reveal-left:nth-child(3), .reveal-scale:nth-child(3) { transition-delay: 0.25s; }
+    .reveal:nth-child(4), .reveal-left:nth-child(4), .reveal-scale:nth-child(4) { transition-delay: 0.35s; }
+    .reveal:nth-child(5), .reveal-left:nth-child(5), .reveal-scale:nth-child(5) { transition-delay: 0.42s; }
+    .reveal:nth-child(6), .reveal-left:nth-child(6) { transition-delay: 0.49s; }
+
+    /* ===========================================
+       PROGRESS BAR
+       =========================================== */
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: var(--accent-blue);
+      z-index: 1000;
+      transition: width 0.3s ease;
+      width: 0%;
+    }
+
+    /* ===========================================
+       NAVIGATION DOTS
+       =========================================== */
+    .nav-dots {
+      position: fixed;
+      right: clamp(0.75rem, 2vw, 1.5rem);
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: clamp(5px, 0.8vh, 9px);
+      z-index: 999;
+      list-style: none;
+    }
+
+    .nav-dot {
+      width: clamp(5px, 0.7vw, 8px);
+      height: clamp(5px, 0.7vw, 8px);
+      border-radius: 50%;
+      background: rgba(100,100,100,0.4);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      padding: 0;
+    }
+
+    .nav-dot.active {
+      background: var(--accent-blue);
+      transform: scale(1.4);
+    }
+
+    /* ===========================================
+       SLIDE 1 — TITLE (Dark split panel)
+       =========================================== */
+    .title-slide {
+      background: var(--bg-dark);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .title-left {
+      padding: var(--slide-padding);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding-bottom: clamp(2rem, 6vh, 5rem);
+      position: relative;
+      z-index: 1;
+    }
+
+    .title-right {
+      background: var(--accent-blue);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .title-right::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse at 20% 80%, rgba(0,0,0,0.3) 0%, transparent 60%);
+    }
+
+    .title-right-inner {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: var(--slide-padding);
+    }
+
+    .course-badge {
+      display: inline-block;
+      color: rgba(255,255,255,0.7);
+      font-size: var(--small-size);
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: clamp(0.75rem, 2vh, 1.5rem);
+    }
+
+    .org-label {
+      font-size: clamp(2.5rem, 8vw, 7rem);
+      font-weight: 800;
+      color: rgba(255,255,255,0.12);
+      line-height: 1;
+      letter-spacing: -0.02em;
+      user-select: none;
+    }
+
+    .title-eyebrow {
+      font-size: var(--small-size);
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent-blue);
+      margin-bottom: clamp(0.5rem, 1.5vh, 1rem);
+    }
+
+    .title-main {
+      font-size: var(--title-size);
+      font-weight: 800;
+      color: var(--text-light);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: clamp(0.5rem, 1.5vh, 1rem);
+    }
+
+    .title-sub {
+      font-size: var(--h3-size);
+      font-weight: 400;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.4;
+      margin-bottom: clamp(1rem, 3vh, 2.5rem);
+    }
+
+    .title-meta {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(2px, 0.4vh, 5px);
+    }
+
+    .title-meta span {
+      font-size: var(--small-size);
+      color: rgba(255,255,255,0.35);
+      font-weight: 500;
+    }
+
+    /* ===========================================
+       SHARED — Dark slides
+       =========================================== */
+    .slide-dark {
+      background: var(--bg-dark);
+      color: var(--text-light);
+    }
+
+    .slide-dark .slide-content {
+      padding: var(--slide-padding);
+    }
+
+    /* ===========================================
+       SHARED — Light slides
+       =========================================== */
+    .slide-light {
+      background: #f9fafb;
+      color: var(--text-dark);
+    }
+
+    /* ===========================================
+       SLIDE NUMBER & HEADER LABEL
+       =========================================== */
+    .slide-header {
+      position: absolute;
+      top: clamp(1rem, 2.5vh, 2rem);
+      left: var(--slide-padding);
+      right: var(--slide-padding);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 10;
+    }
+
+    .slide-num {
+      font-size: var(--label-size);
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0.35;
+    }
+
+    .section-tag {
+      font-size: var(--label-size);
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: clamp(3px, 0.5vh, 5px) clamp(6px, 1vw, 10px);
+      border-radius: 30px;
+    }
+
+    .tag-problem { background: rgba(192,57,43,0.15); color: var(--accent-warm); }
+    .tag-analysis { background: rgba(26,86,219,0.15); color: var(--accent-blue); }
+    .tag-reco { background: rgba(16,185,129,0.15); color: #059669; }
+    .tag-impl { background: rgba(234,179,8,0.15); color: #b45309; }
+
+    /* ===========================================
+       SLIDE 2 — PROBLEM (Dark, accent bar)
+       =========================================== */
+    .problem-slide {
+      background: var(--bg-dark);
+    }
+
+    .problem-slide .slide-content {
+      padding: var(--slide-padding);
+      justify-content: center;
+      gap: var(--content-gap);
+    }
+
+    .slide-eyebrow {
+      font-size: var(--small-size);
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent-blue);
+      margin-bottom: clamp(0.4rem, 1vh, 0.8rem);
+    }
+
+    .slide-title {
+      font-size: var(--h2-size);
+      font-weight: 800;
+      color: var(--text-light);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: var(--content-gap);
+    }
+
+    .slide-title-light {
+      color: var(--text-dark);
+    }
+
+    .bullet-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--element-gap);
+    }
+
+    .bullet-list li {
+      font-size: var(--body-size);
+      color: rgba(255,255,255,0.72);
+      line-height: 1.5;
+      padding-left: clamp(1rem, 2vw, 1.5rem);
+      position: relative;
+    }
+
+    .bullet-list li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--accent-blue);
+      font-weight: 700;
+    }
+
+    .bullet-list-dark li {
+      color: rgba(10,10,10,0.72);
+    }
+
+    .bullet-list-dark li::before {
+      color: var(--accent-blue);
+    }
+
+    .impact-box {
+      margin-top: var(--content-gap);
+      border-left: 3px solid var(--accent-blue);
+      padding: clamp(0.6rem, 1.5vh, 1rem) clamp(0.8rem, 2vw, 1.5rem);
+      background: rgba(26,86,219,0.08);
+      border-radius: 0 6px 6px 0;
+    }
+
+    .impact-box p {
+      font-size: var(--body-size);
+      font-weight: 700;
+      color: var(--text-light);
+      font-style: italic;
+      line-height: 1.4;
+    }
+
+    .impact-box-light p {
+      color: var(--text-dark);
+    }
+
+    /* ===========================================
+       SLIDE 3 — FOUR TEAMS (Split, table)
+       =========================================== */
+    .teams-slide {
+      background: var(--bg-dark);
+    }
+
+    .team-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 clamp(3px, 0.5vh, 6px);
+      margin-top: var(--content-gap);
+    }
+
+    .team-table th {
+      font-size: var(--label-size);
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      text-align: left;
+      padding-bottom: clamp(4px, 0.8vh, 8px);
+      padding-left: clamp(0.6rem, 1.2vw, 1rem);
+    }
+
+    .team-table td {
+      font-size: var(--body-size);
+      color: rgba(255,255,255,0.75);
+      padding: clamp(0.5rem, 1.2vh, 0.9rem) clamp(0.6rem, 1.2vw, 1rem);
+      background: rgba(255,255,255,0.04);
+      line-height: 1.4;
+    }
+
+    .team-table tr td:first-child {
+      border-radius: 6px 0 0 6px;
+      font-weight: 700;
+      color: var(--text-light);
+    }
+
+    .team-table tr td:last-child {
+      border-radius: 0 6px 6px 0;
+    }
+
+    .team-table tr.highlight-row td {
+      background: rgba(26,86,219,0.18);
+    }
+
+    .team-table tr.highlight-row td:first-child {
+      color: #93c5fd;
+    }
+
+    .table-insight {
+      margin-top: var(--element-gap);
+      font-size: var(--small-size);
+      color: rgba(255,255,255,0.4);
+      font-style: italic;
+      text-align: right;
+    }
+
+    /* ===========================================
+       SLIDE 4 — ORGDNA FRAMEWORK (3 panels)
+       =========================================== */
+    .framework-slide {
+      background: #f9fafb;
+    }
+
+    .framework-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(0.5rem, 1.5vw, 1.5rem);
+      margin-top: var(--content-gap);
+    }
+
+    .framework-card {
+      border-radius: 10px;
+      padding: clamp(1rem, 2.5vh, 1.8rem) clamp(0.8rem, 2vw, 1.5rem);
+      display: flex;
+      flex-direction: column;
+      gap: clamp(0.4rem, 1vh, 0.75rem);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .fc-architecture { background: #0a0a0a; }
+    .fc-culture { background: var(--accent-blue); }
+    .fc-power { background: var(--accent-warm); }
+
+    .fc-num {
+      font-size: clamp(2rem, 5vw, 4rem);
+      font-weight: 800;
+      opacity: 0.12;
+      line-height: 1;
+      position: absolute;
+      bottom: clamp(0.4rem, 1vh, 0.75rem);
+      right: clamp(0.6rem, 1.5vw, 1rem);
+      color: #fff;
+    }
+
+    .fc-title {
+      font-size: var(--h3-size);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.15;
+    }
+
+    .fc-subtitle {
+      font-size: var(--small-size);
+      color: rgba(255,255,255,0.6);
+      font-weight: 500;
+    }
+
+    .fc-question {
+      font-size: var(--body-size);
+      color: rgba(255,255,255,0.85);
+      font-style: italic;
+      line-height: 1.4;
+      margin-top: auto;
+      border-top: 1px solid rgba(255,255,255,0.15);
+      padding-top: clamp(0.4rem, 1vh, 0.7rem);
+    }
+
+    .framework-tagline {
+      margin-top: clamp(0.75rem, 2vh, 1.5rem);
+      font-size: var(--small-size);
+      color: var(--text-muted);
+      text-align: center;
+      font-style: italic;
+    }
+
+    /* ===========================================
+       SLIDES 5,6,7 — ANALYSIS slides (Split layout)
+       =========================================== */
+    .analysis-slide {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .analysis-left {
+      background: var(--bg-dark);
+      padding: var(--slide-padding);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: var(--element-gap);
+      overflow: hidden;
+    }
+
+    .analysis-right {
+      padding: var(--slide-padding);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: var(--element-gap);
+      overflow: hidden;
+    }
+
+    .ar-architecture { background: #111827; }
+    .ar-culture { background: #1a3a6e; }
+    .ar-power { background: var(--accent-warm); }
+
+    .analysis-dimension-tag {
+      font-size: var(--label-size);
+      font-weight: 800;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: clamp(3px,0.5vh,5px) clamp(6px,1vw,10px);
+      border-radius: 30px;
+      display: inline-block;
+      width: fit-content;
+      margin-bottom: clamp(0.3rem, 0.8vh, 0.6rem);
+    }
+
+    .dim-arch { background: rgba(26,86,219,0.2); color: #93c5fd; }
+    .dim-cult { background: rgba(255,255,255,0.15); color: #ffffff; }
+    .dim-power { background: rgba(255,255,255,0.2); color: #fef3c7; }
+
+    .analysis-heading {
+      font-size: var(--h2-size);
+      font-weight: 800;
+      color: var(--text-light);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+
+    .analysis-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--element-gap);
+      margin-top: clamp(0.3rem, 0.8vh, 0.7rem);
+    }
+
+    .analysis-list li {
+      font-size: var(--body-size);
+      color: rgba(255,255,255,0.7);
+      line-height: 1.4;
+      padding-left: clamp(0.8rem, 1.8vw, 1.2rem);
+      position: relative;
+    }
+
+    .analysis-list li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      font-weight: 700;
+      opacity: 0.5;
+    }
+
+    .callout-box {
+      margin-top: clamp(0.5rem, 1.5vh, 1rem);
+      background: rgba(255,255,255,0.08);
+      border-radius: 8px;
+      padding: clamp(0.5rem, 1.5vh, 1rem) clamp(0.7rem, 1.5vw, 1.2rem);
+    }
+
+    .callout-label {
+      font-size: var(--label-size);
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.5;
+      margin-bottom: clamp(2px, 0.4vh, 4px);
+      color: var(--text-light);
+    }
+
+    .callout-text {
+      font-size: var(--body-size);
+      line-height: 1.45;
+      color: rgba(255,255,255,0.85);
+      font-style: italic;
+    }
+
+    /* Right panel content for analysis slides */
+    .root-cause-box {
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: clamp(0.8rem, 2vh, 1.5rem);
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .root-cause-label {
+      font-size: var(--label-size);
+      font-weight: 800;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: clamp(0.4rem, 1vh, 0.75rem);
+    }
+
+    .root-cause-text {
+      font-size: var(--body-size);
+      color: rgba(255,255,255,0.9);
+      line-height: 1.5;
+    }
+
+    /* ===========================================
+       SLIDE 8 — RECOMMENDATIONS (3 columns)
+       =========================================== */
+    .reco-slide {
+      background: #f9fafb;
+    }
+
+    .reco-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(0.5rem, 1.5vw, 1.2rem);
+      margin-top: var(--content-gap);
+    }
+
+    .reco-card {
+      border-radius: 10px;
+      padding: clamp(0.9rem, 2.5vh, 1.6rem);
+      display: flex;
+      flex-direction: column;
+      gap: clamp(0.3rem, 0.8vh, 0.65rem);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .rc-1 { background: var(--bg-dark); }
+    .rc-2 { background: var(--accent-blue); }
+    .rc-3 { background: #0f766e; }
+
+    .reco-num {
+      font-size: clamp(1.5rem, 3.5vw, 3rem);
+      font-weight: 800;
+      color: rgba(255,255,255,0.1);
+      line-height: 1;
+      position: absolute;
+      top: clamp(0.5rem, 1.2vh, 0.9rem);
+      right: clamp(0.6rem, 1.5vw, 1rem);
+    }
+
+    .reco-dim {
+      font-size: var(--label-size);
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+    }
+
+    .reco-title {
+      font-size: var(--h3-size);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+    }
+
+    .reco-body {
+      font-size: var(--body-size);
+      color: rgba(255,255,255,0.75);
+      line-height: 1.45;
+      flex: 1;
+    }
+
+    .reco-flows {
+      font-size: var(--small-size);
+      color: rgba(255,255,255,0.4);
+      font-style: italic;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: clamp(0.3rem, 0.7vh, 0.5rem);
+      margin-top: auto;
+    }
+
+    /* ===========================================
+       SLIDE 9 — IMPLEMENTATION (phases, light)
+       =========================================== */
+    .impl-slide { background: #f9fafb; }
+
+    .phases-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(0.5rem, 1.5vw, 1.2rem);
+      margin-top: var(--content-gap);
+    }
+
+    .phase-card {
+      border-radius: 10px;
+      padding: clamp(0.8rem, 2vh, 1.4rem);
+      background: #fff;
+      border: 1px solid var(--border-light);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      display: flex;
+      flex-direction: column;
+      gap: clamp(0.3rem, 0.8vh, 0.6rem);
+    }
+
+    .phase-label {
+      font-size: var(--label-size);
+      font-weight: 800;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent-blue);
+    }
+
+    .phase-timeframe {
+      font-size: var(--small-size);
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .phase-title {
+      font-size: var(--h3-size);
+      font-weight: 800;
+      color: var(--text-dark);
+      line-height: 1.2;
+    }
+
+    .phase-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(2px, 0.4vh, 4px);
+    }
+
+    .phase-list li {
+      font-size: var(--body-size);
+      color: #374151;
+      line-height: 1.4;
+      padding-left: clamp(0.7rem, 1.5vw, 1rem);
+      position: relative;
+    }
+
+    .phase-list li::before {
+      content: '·';
+      position: absolute;
+      left: clamp(0.2rem, 0.5vw, 0.35rem);
+      color: var(--accent-blue);
+      font-weight: 900;
+      font-size: 1.2em;
+    }
+
+    .resistance-note {
+      margin-top: clamp(0.6rem, 1.5vh, 1.2rem);
+      background: #fefce8;
+      border: 1px solid #fde68a;
+      border-radius: 8px;
+      padding: clamp(0.5rem, 1.2vh, 0.9rem) clamp(0.7rem, 1.5vw, 1.2rem);
+      font-size: var(--small-size);
+      color: #92400e;
+      line-height: 1.4;
+    }
+
+    /* ===========================================
+       SLIDE 10 — RISKS TABLE
+       =========================================== */
+    .risk-slide { background: var(--bg-dark); }
+
+    .risk-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 clamp(3px, 0.5vh, 5px);
+      margin-top: var(--content-gap);
+    }
+
+    .risk-table th {
+      font-size: var(--label-size);
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.25);
+      text-align: left;
+      padding: 0 clamp(0.5rem, 1vw, 0.9rem) clamp(4px, 0.8vh, 7px);
+    }
+
+    .risk-table td {
+      font-size: var(--body-size);
+      color: rgba(255,255,255,0.72);
+      padding: clamp(0.45rem, 1vh, 0.8rem) clamp(0.5rem, 1vw, 0.9rem);
+      background: rgba(255,255,255,0.04);
+      line-height: 1.35;
+      vertical-align: top;
+    }
+
+    .risk-table tr td:first-child {
+      border-radius: 6px 0 0 6px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.9);
+      width: 35%;
+    }
+
+    .risk-table tr td:nth-child(2) { width: 15%; }
+
+    .risk-table tr td:last-child {
+      border-radius: 0 6px 6px 0;
+    }
+
+    .likelihood-high {
+      color: #fca5a5;
+      font-weight: 700;
+    }
+    .likelihood-med {
+      color: #fde68a;
+      font-weight: 700;
+    }
+
+    /* ===========================================
+       SLIDE 11 — METRICS (3 gauges)
+       =========================================== */
+    .metrics-slide { background: #f9fafb; }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(0.5rem, 1.5vw, 1.5rem);
+      margin-top: var(--content-gap);
+    }
+
+    .metric-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: clamp(0.9rem, 2.5vh, 1.6rem);
+      border: 1px solid var(--border-light);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      display: flex;
+      flex-direction: column;
+      gap: clamp(0.3rem, 0.8vh, 0.6rem);
+    }
+
+    .metric-category {
+      font-size: var(--label-size);
+      font-weight: 800;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .mc-ops { color: var(--accent-blue); }
+    .mc-cust { color: #0f766e; }
+    .mc-cult { color: var(--accent-warm); }
+
+    .metric-name {
+      font-size: var(--h3-size);
+      font-weight: 800;
+      color: var(--text-dark);
+      line-height: 1.2;
+    }
+
+    .metric-baseline {
+      font-size: var(--small-size);
+      color: var(--text-muted);
+    }
+
+    .metric-target {
+      font-size: var(--body-size);
+      font-weight: 700;
+      margin-top: auto;
+    }
+
+    .mt-ops { color: var(--accent-blue); }
+    .mt-cust { color: #0f766e; }
+    .mt-cult { color: var(--accent-warm); }
+
+    .metric-bar-bg {
+      width: 100%;
+      height: 4px;
+      background: #e5e7eb;
+      border-radius: 2px;
+      margin-top: clamp(0.3rem, 0.8vh, 0.5rem);
+    }
+
+    .metric-bar {
+      height: 100%;
+      border-radius: 2px;
+      width: 0%;
+      transition: width 1.2s var(--ease-out-expo) 0.6s;
+    }
+
+    .slide.visible .metric-bar-ops { width: 50%; background: var(--accent-blue); }
+    .slide.visible .metric-bar-cust { width: 60%; background: #0f766e; }
+    .slide.visible .metric-bar-cult { width: 0%; background: var(--accent-warm); animation: nudge 1s ease 1.2s forwards; }
+
+    @keyframes nudge {
+      0% { width: 0%; }
+      100% { width: 8%; }
+    }
+
+    /* ===========================================
+       SLIDE 12 — CONCLUSION (Dark, centered)
+       =========================================== */
+    .conclusion-slide {
+      background: var(--bg-dark);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: var(--slide-padding);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .conclusion-slide::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 30% 60%, rgba(26,86,219,0.12) 0%, transparent 55%),
+        radial-gradient(ellipse at 70% 30%, rgba(192,57,43,0.08) 0%, transparent 55%);
+    }
+
+    .conclusion-inner {
+      position: relative;
+      z-index: 1;
+      max-width: min(85vw, 800px);
+      display: flex;
+      flex-direction: column;
+      gap: var(--content-gap);
+      align-items: center;
+    }
+
+    .conclusion-label {
+      font-size: var(--label-size);
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent-blue);
+    }
+
+    .conclusion-heading {
+      font-size: var(--h2-size);
+      font-weight: 800;
+      color: var(--text-light);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+
+    .conclusion-summary {
+      font-size: var(--body-size);
+      color: rgba(255,255,255,0.6);
+      line-height: 1.6;
+      text-align: left;
+      max-width: 650px;
+    }
+
+    .conclusion-summary p + p {
+      margin-top: clamp(0.4rem, 1vh, 0.75rem);
+    }
+
+    .conclusion-quote {
+      margin-top: clamp(0.5rem, 1.5vh, 1.2rem);
+      padding: clamp(0.75rem, 2vh, 1.25rem) clamp(1rem, 2.5vw, 1.75rem);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.04);
+      max-width: 650px;
+    }
+
+    .conclusion-quote p {
+      font-size: var(--body-size);
+      color: rgba(255,255,255,0.75);
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    .conclusion-meta {
+      margin-top: clamp(0.5rem, 1.5vh, 1.2rem);
+      display: flex;
+      gap: clamp(0.5rem, 2vw, 1.5rem);
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .conclusion-meta span {
+      font-size: var(--small-size);
+      color: rgba(255,255,255,0.25);
+      font-weight: 500;
+    }
+
+    /* ===========================================
+       KEYBOARD HINT
+       =========================================== */
+    .keyboard-hint {
+      position: fixed;
+      bottom: clamp(0.75rem, 1.5vh, 1.25rem);
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: var(--label-size);
+      color: rgba(128,128,128,0.4);
+      letter-spacing: 0.1em;
+      z-index: 100;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Progress bar -->
+  <div class="progress-bar" id="progressBar"></div>
+
+  <!-- Navigation dots -->
+  <nav class="nav-dots" id="navDots" aria-label="Slide navigation"></nav>
+
+  <!-- Keyboard hint -->
+  <div class="keyboard-hint">↑ ↓ Arrow Keys or Scroll to Navigate</div>
+
+  <!-- ==========================================
+       SLIDE 1 — TITLE
+       ========================================== -->
+  <section class="slide title-slide" id="slide-1" aria-label="Title slide">
+    <div class="title-left">
+      <div class="title-eyebrow reveal">Organizational Behavior II — Final Memo</div>
+      <h1 class="title-main reveal">Scaling Without<br>Fracturing</h1>
+      <p class="title-sub reveal">Why Four Teams Couldn't Build<br>One Tool at Nutanix</p>
+      <div class="title-meta reveal">
+        <span>Parag Rahangdale · INSEAD MBA · Class 26D</span>
+        <span>Section A7 · OrgDNA Framework</span>
+      </div>
+    </div>
+    <div class="title-right">
+      <div class="title-right-inner">
+        <div class="course-badge reveal">An OrgDNA Analysis</div>
+        <div class="org-label reveal-scale">ORG<br>DNA</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       SLIDE 2 — BUSINESS PROBLEM
+       ========================================== -->
+  <section class="slide slide-dark" id="slide-2" aria-label="Business problem">
+    <div class="slide-header">
+      <span class="slide-num" style="color:rgba(255,255,255,0.3)">02 / 12</span>
+      <span class="section-tag tag-problem">Problem</span>
+    </div>
+    <div class="slide-content">
+      <div class="slide-eyebrow reveal">The Business Problem</div>
+      <h2 class="slide-title reveal">The Problem Was<br>Never Technical</h2>
+      <ul class="bullet-list reveal">
+        <li>Nutanix set out to build an <strong>in-place hypervisor conversion tool</strong> — enabling enterprise customers to migrate from VMware ESXi to AHV without downtime or full reinstallation</li>
+        <li>The project required <strong>4 cross-functional teams</strong> to work in deep concert: Core AHV, Networking, VMware Hypervisor, and Move (migration) — my team</li>
+        <li>Result: Chronic delays, misaligned interfaces, repeated re-work — not because the technology was impossible, but because <strong>the organization could not execute across its own boundaries</strong></li>
+      </ul>
+      <div class="impact-box reveal">
+        <p>"This was not a strategy problem. It was a DNA problem."</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       SLIDE 3 — FOUR TEAMS
+       ========================================== -->
+  <section class="slide teams-slide slide-dark" id="slide-3" aria-label="The four teams">
+    <div class="slide-header">
+      <span class="slide-num" style="color:rgba(255,255,255,0.3)">03 / 12</span>
+      <span class="section-tag tag-problem">Problem</span>
+    </div>
+    <div class="slide-content">
+      <div class="slide-eyebrow reveal">The Cast</div>
+      <h2 class="slide-title reveal">One Product. Four Owners.<br>Zero Shared North Star.</h2>
+      <table class="team-table reveal">
+        <thead>
+          <tr>
+            <th>Team</th>
+            <th>Role in Project</th>
+            <th>Primary KPI</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Core AHV</td>
+            <td>Hypervisor host compatibility &amp; kernel-level conversion</td>
+            <td>AHV stability &amp; uptime</td>
+          </tr>
+          <tr>
+            <td>Networking</td>
+            <td>VM network continuity during live conversion</td>
+            <td>Zero packet-loss SLA</td>
+          </tr>
+          <tr>
+            <td>VMware Hypervisor</td>
+            <td>Source-system understanding &amp; ESXi hooks</td>
+            <td>VMware feature parity</td>
+          </tr>
+          <tr class="highlight-row">
+            <td>Move (my team)</td>
+            <td>Migration orchestration, UX &amp; end-to-end delivery</td>
+            <td>Feature delivery velocity</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="table-insight reveal">Each team was measured on <em>their</em> outcome — not the <em>customer's</em> outcome.</p>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       SLIDE 4 — ORGDNA FRAMEWORK
+       ========================================== -->
+  <section class="slide framework-slide" id="slide-4" aria-label="OrgDNA framework">
+    <div class="slide-header">
+      <span class="slide-num" style="color:rgba(10,10,10,0.25)">04 / 12</span>
+      <span class="section-tag tag-analysis">Framework</span>
+    </div>
+    <div class="slide-content">
+      <div class="slide-eyebrow reveal" style="color:var(--accent-blue)">Diagnostic Lens</div>
+      <h2 class="slide-title slide-title-light reveal">Diagnosing Through OrgDNA</h2>
+      <div class="framework-grid">
+        <div class="framework-card fc-architecture reveal-scale">
+          <div class="fc-title">Architecture</div>
+          <div class="fc-subtitle">Structure &amp; Incentives</div>
+          <div class="fc-question">How are roles, reporting, and rewards designed?</div>
+          <div class="fc-num">01</div>
+        </div>
+        <div class="framework-card fc-culture reveal-scale">
+          <div class="fc-title">Culture</div>
+          <div class="fc-subtitle">Habits &amp; Assumptions</div>
+          <div class="fc-question">What do people believe makes them safe?</div>
+          <div class="fc-num">02</div>
+        </div>
+        <div class="framework-card fc-power reveal-scale">
+          <div class="fc-title">Power &amp; Influence</div>
+          <div class="fc-subtitle">Networks &amp; Politics</div>
+          <div class="fc-question">Who controls information and decisions?</div>
+          <div class="fc-num">03</div>
+        </div>
+      </div>
+      <p class="framework-tagline reveal">I apply all three lenses to explain why the in-place conversion project failed to execute — and what must change.</p>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       SLIDE 5 — ANALYSIS: ARCHITECTURE
+       ========================================== -->
+  <section class="slide analysis-slide" id="slide-5" aria-label="Architecture analysis">
+    <div class="analysis-left">
+      <div class="analysis-dimension-tag dim-arch reveal">Architecture</div>
+      <h2 class="analysis-heading reveal">Misaligned<br>Incentives &amp;<br>Structural Holes</h2>
+      <ul class="analysis-list reveal">
+        <li>No single DRI for end-to-end customer outcome — each team had separate manager, roadmap &amp; backlog</li>
+        <li>Engineers incentivized on functional stability, not whether the full conversion workflow worked for the customer</li>
+        <li>Cross-team interface decisions required multi-layer escalations adding weeks to hour-level problems</li>
+        <li>Handoff specs defined unilaterally by each team — never co-owned</li>
+      </ul>
+    </div>
+    <div class="analysis-right ar-architecture">
+      <div class="slide-header" style="position:relative; top:auto; left:auto; right:auto; margin-bottom: clamp(0.5rem,1.5vh,1rem);">
+        <span class="slide-num" style="color:rgba(255,255,255,0.25)">05 / 12</span>
+        <span class="section-tag tag-analysis">Analysis 1 of 3</span>
+      </div>
+      <div class="root-cause-box reveal">
+        <div class="root-cause-label">Root Cause</div>
+        <div class="root-cause-text"><strong style="color:#93c5fd">Structural holes</strong> existed between the 4 teams. No bridging role, no shared planning forum, no integrated backlog. Each team was an information island — rational behaviour for individuals trapped in a functional incentive structure.</div>
+      </div>
+      <div class="callout-box reveal">
+        <div class="callout-label">Key Concept</div>
+        <div class="callout-text">Structural holes: gaps in information flow between otherwise dense but siloed networks — the "blind men and the elephant" problem.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       SLIDE 6 — ANALYSIS: CULTURE
+       ========================================== -->
+  <section class="slide analysis-slide" id="slide-6" aria-label="Culture analysis">
+    <div class="analysis-left">
+      <div class="analysis-dimension-tag dim-cult reveal">Culture</div>
+      <h2 class="analysis-heading reveal">The Assumption<br>That Silence<br>Is Safe</h2>
+      <ul class="analysis-list reveal">
+        <li>Move team repeatedly discovered AHV/Networking incompatibilities <strong style="color:#fff">weeks into a sprint</strong> — blockers not surfaced early</li>
+        <li>Retrospectives happened <em>after</em> delays — not during the work</li>
+        <li>Teams defaulted to async comms (JIRA, email) for decisions requiring <strong style="color:#fff">synchronous resolution</strong></li>
+        <li>Implicit belief: exposing a dependency on another team signals weakness</li>
+      </ul>
+    </div>
+    <div class="analysis-right ar-culture">
+      <div class="slide-header" style="position:relative; top:auto; left:auto; right:auto; margin-bottom: clamp(0.5rem,1.5vh,1rem);">
+        <span class="slide-num" style="color:rgba(255,255,255,0.25)">06 / 12</span>
+        <span class="section-tag tag-analysis">Analysis 2 of 3</span>
+      </div>
+      <div class="root-cause-box reveal">
+        <div class="root-cause-label">Root Cause</div>
+        <div class="root-cause-text">A culture of <strong style="color:#93c5fd">"hiding problems is safe"</strong> — reinforced daily by review rituals, meeting formats and solo accountability metrics. Habits, not values, locked in the silence.</div>
+      </div>
+      <div class="callout-box reveal">
+        <div class="callout-label">NUMMI Principle</div>
+        <div class="callout-text">"You cannot change culture by telling people to think differently. You change it by changing what people <em>do</em> every day."</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       SLIDE 7 — ANALYSIS: POWER
+       ========================================== -->
+  <section class="slide analysis-slide" id="slide-7" aria-label="Power and influence analysis">
+    <div class="analysis-left">
+      <div class="analysis-dimension-tag dim-power reveal">Power &amp; Influence</div>
+      <h2 class="analysis-heading reveal">Responsibility<br>Without<br>Authority</h2>
+      <ul class="analysis-list reveal">
+        <li>Move team accountable for delivering the product — <strong style="color:#fff">zero formal authority</strong> over the 3 teams it depended on</li>
+        <li>Conversion interface decisions blocked in competing backlog prioritization meetings controlled by functional managers</li>
+        <li>AHV &amp; Networking treated the conversion project as a <strong style="color:#fff">secondary dependency</strong> on their own roadmaps</li>
+        <li>Move team relied entirely on relational influence and informal persuasion — no structural lever to escalate</li>
+      </ul>
+    </div>
+    <div class="analysis-right ar-power">
+      <div class="slide-header" style="position:relative; top:auto; left:auto; right:auto; margin-bottom: clamp(0.5rem,1.5vh,1rem);">
+        <span class="slide-num" style="color:rgba(255,255,255,0.2)">07 / 12</span>
+        <span class="section-tag" style="background:rgba(255,255,255,0.2);color:#fef3c7;">Analysis 3 of 3</span>
+      </div>
+      <div class="root-cause-box reveal" style="background:rgba(255,255,255,0.15); border-color:rgba(255,255,255,0.2);">
+        <div class="root-cause-label">Root Cause</div>
+        <div class="root-cause-text">Each team operated in a <strong style="color:#fef3c7">closed network</strong> — dense internally, sparse externally. No open-network brokers existed to bridge information across team lines, fuelling political paralysis at every handoff.</div>
+      </div>
+      <div class="callout-box reveal" style="background:rgba(255,255,255,0.12);">
+        <div class="callout-label">Network Concept</div>
+        <div class="callout-text">Closed vs. open network topology: information hoarding reinforces existing power structures and starves cross-functional coordination of the data it needs.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       SLIDE 8 — RECOMMENDATIONS
+       ========================================== -->
+  <section class="slide reco-slide" id="slide-8" aria-label="Recommendations">
+    <div class="slide-header">
+      <span class="slide-num" style="color:rgba(10,10,10,0.2)">08 / 12</span>
+      <span class="section-tag tag-reco">Recommendations</span>
+    </div>
+    <div class="slide-content">
+      <div class="slide-eyebrow reveal" style="color:var(--accent-blue)">Three Interventions</div>
+      <h2 class="slide-title slide-title-light reveal">One Integrated Solution</h2>
+      <div class="reco-grid">
+        <div class="reco-card rc-1 reveal">
+          <div class="reco-num">01</div>
+          <div class="reco-dim">Architecture</div>
+          <div class="reco-title">Cross-Functional Squad with Shared OKRs</div>
+          <div class="reco-body">Form a dedicated squad — 1 lead from each of the 4 teams + a single Product DRI with authority over the end-to-end customer outcome. Replace functional KPIs with shared metrics: time-to-convert, success rate, NPS.</div>
+          <div class="reco-flows">Closes structural holes; forces open networks by design</div>
+        </div>
+        <div class="reco-card rc-2 reveal">
+          <div class="reco-num">02</div>
+          <div class="reco-dim">Culture</div>
+          <div class="reco-title">Stop-the-Line Blocker Ritual</div>
+          <div class="reco-body">Any team member can and <em>must</em> flag a cross-team blocker in a shared weekly War Room — 30 min synchronous huddle. Blockers treated as collective problems. Draws directly from the NUMMI andon cord principle.</div>
+          <div class="reco-flows">Changes daily behaviour → changes culture (NUMMI)</div>
+        </div>
+        <div class="reco-card rc-3 reveal">
+          <div class="reco-num">03</div>
+          <div class="reco-dim">Power &amp; Influence</div>
+          <div class="reco-title">Broker Roles &amp; Shared Transparency</div>
+          <div class="reco-body">Formally recognize cross-functional connectors who already bridge teams informally — give them a mandate. Deploy a unified dashboard: shared dependency map, blocker log, milestone tracker visible to all 4 teams.</div>
+          <div class="reco-flows">Removes information hoarding; shifts power to open networks</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       SLIDE 9 — IMPLEMENTATION
+       ========================================== -->
+  <section class="slide impl-slide" id="slide-9" aria-label="Implementation strategy">
+    <div class="slide-header">
+      <span class="slide-num" style="color:rgba(10,10,10,0.2)">09 / 12</span>
+      <span class="section-tag tag-impl">Implementation</span>
+    </div>
+    <div class="slide-content">
+      <div class="slide-eyebrow reveal" style="color:var(--accent-blue)">Sequencing for Change</div>
+      <h2 class="slide-title slide-title-light reveal">Not a Big Bang —<br>A Test-and-Learn Cycle</h2>
+      <div class="phases-grid">
+        <div class="phase-card reveal">
+          <div class="phase-label">Phase 1</div>
+          <div class="phase-timeframe">Weeks 1–4 · Foundation</div>
+          <div class="phase-title">Build Coalition &amp; Launch Pilot</div>
+          <ul class="phase-list">
+            <li>Identify existing cross-functional connectors (the "unsung influencers")</li>
+            <li>Form one pilot squad around one customer journey (ESXi → AHV mid-market cluster)</li>
+            <li>Launch shared dashboard immediately — quick win, low resistance</li>
+          </ul>
+        </div>
+        <div class="phase-card reveal">
+          <div class="phase-label">Phase 2</div>
+          <div class="phase-timeframe">Weeks 5–12 · Momentum</div>
+          <div class="phase-title">Prove Value &amp; Build the Case</div>
+          <ul class="phase-list">
+            <li>Introduce Stop-the-Line ritual with pilot squad</li>
+            <li>Demonstrate early wins: shorter dependency-resolution time, one on-schedule conversion</li>
+            <li>Use pilot data to make business case for broader rollout</li>
+          </ul>
+        </div>
+        <div class="phase-card reveal">
+          <div class="phase-label">Phase 3</div>
+          <div class="phase-timeframe">Month 4+ · Scale</div>
+          <div class="phase-title">Institutionalise &amp; Reward</div>
+          <ul class="phase-list">
+            <li>Extend squad model to all 4 team interfaces</li>
+            <li>Revise incentive structures with HR — tie manager reviews to cross-functional outcomes</li>
+            <li>Formalize broker roles in job descriptions</li>
+          </ul>
+        </div>
+      </div>
+      <div class="resistance-note reveal">
+        ⚡ <strong>Managing Resistance:</strong> Functional VPs may resist loss of roadmap control. Use <em>agenda-linking</em> — frame the squad model as protecting their team's reputation by reducing blame-shifting and re-work.
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       SLIDE 10 — RISKS & MITIGATION
+       ========================================== -->
+  <section class="slide risk-slide" id="slide-10" aria-label="Risks and mitigation">
+    <div class="slide-header">
+      <span class="slide-num" style="color:rgba(255,255,255,0.25)">10 / 12</span>
+      <span class="section-tag tag-impl">Bullet-Proofing</span>
+    </div>
+    <div class="slide-content">
+      <div class="slide-eyebrow reveal">Anticipating the Obstacles</div>
+      <h2 class="slide-title reveal">Risks &amp; Mitigation</h2>
+      <table class="risk-table reveal">
+        <thead>
+          <tr>
+            <th>Risk</th>
+            <th>Likelihood</th>
+            <th>Mitigation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Role confusion — dual reporting in pilot squad</td>
+            <td><span class="likelihood-med">Medium</span></td>
+            <td>Define "rules of the road": squad owns <em>what</em>, functions own <em>how</em></td>
+          </tr>
+          <tr>
+            <td>Functional VPs resist shared OKRs (loss of autonomy)</td>
+            <td><span class="likelihood-high">High</span></td>
+            <td>Agenda-link: shared OKRs protect each team from blame for project failures</td>
+          </tr>
+          <tr>
+            <td>Stop-the-Line ritual collapses into blame sessions</td>
+            <td><span class="likelihood-med">Medium</span></td>
+            <td>Facilitator ground rules: blockers are system problems, not people failures</td>
+          </tr>
+          <tr>
+            <td>Dashboard surfaces uncomfortable truths — teams retreat</td>
+            <td><span class="likelihood-med">Medium</span></td>
+            <td>Executive air cover required: VP must visibly use the dashboard in reviews</td>
+          </tr>
+          <tr>
+            <td>Pilot success stays siloed — doesn't scale</td>
+            <td><span class="likelihood-med">Medium</span></td>
+            <td>Document and broadcast pilot results; deputize pilot team as internal champions</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       SLIDE 11 — METRICS
+       ========================================== -->
+  <section class="slide metrics-slide" id="slide-11" aria-label="Success metrics">
+    <div class="slide-header">
+      <span class="slide-num" style="color:rgba(10,10,10,0.2)">11 / 12</span>
+      <span class="section-tag tag-reco">Metrics</span>
+    </div>
+    <div class="slide-content">
+      <div class="slide-eyebrow reveal" style="color:var(--accent-blue)">Three Metrics</div>
+      <h2 class="slide-title slide-title-light reveal">How We Know It's Working</h2>
+      <div class="metrics-grid">
+        <div class="metric-card reveal">
+          <div class="metric-category mc-ops">Operational</div>
+          <div class="metric-name">Cross-team Dependency Resolution Time</div>
+          <div class="metric-baseline">Baseline: Time from blocker raised → resolved across team boundary</div>
+          <div class="metric-bar-bg"><div class="metric-bar metric-bar-ops"></div></div>
+          <div class="metric-target mt-ops">↓ 50% reduction within 6 months</div>
+        </div>
+        <div class="metric-card reveal">
+          <div class="metric-category mc-cust">Customer</div>
+          <div class="metric-name">Conversion Success Rate &amp; NPS</div>
+          <div class="metric-baseline">Baseline: Current in-place conversion success rate (% completed without rollback)</div>
+          <div class="metric-bar-bg"><div class="metric-bar metric-bar-cust"></div></div>
+          <div class="metric-target mt-cust">↑ NPS &gt; 60 within first product cycle</div>
+        </div>
+        <div class="metric-card reveal">
+          <div class="metric-category mc-cult">Cultural</div>
+          <div class="metric-name">Voluntary Escalation Rate in War Room</div>
+          <div class="metric-baseline">Baseline: ~0 proactive cross-team blockers surfaced per sprint today</div>
+          <div class="metric-bar-bg"><div class="metric-bar metric-bar-cult"></div></div>
+          <div class="metric-target mt-cult">↑ 3–5 proactive escalations per sprint (leading indicator of safety)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       SLIDE 12 — CONCLUSION
+       ========================================== -->
+  <section class="slide conclusion-slide" id="slide-12" aria-label="Conclusion">
+    <div class="slide-header" style="position:absolute; padding: 0 var(--slide-padding); top: clamp(1rem,2.5vh,2rem);">
+      <span class="slide-num" style="color:rgba(255,255,255,0.2)">12 / 12</span>
+      <span class="section-tag tag-analysis">Conclusion</span>
+    </div>
+    <div class="conclusion-inner">
+      <div class="conclusion-label reveal">The Root Was Never the Technology</div>
+      <h2 class="conclusion-heading reveal">The DNA Was the Problem.<br>The DNA Is the Solution.</h2>
+      <div class="conclusion-summary reveal">
+        <p>Nutanix's in-place hypervisor conversion project failed to execute on time because its DNA — architecture, culture, and power structure — was built for <strong style="color:rgba(255,255,255,0.9)">functional excellence</strong>, not <strong style="color:rgba(255,255,255,0.9)">cross-functional delivery</strong>.</p>
+        <p>We had the right engineers, the right vision, the right customer need. What was missing was an organizational system designed to let <strong style="color:rgba(255,255,255,0.9)">four teams move as one</strong>.</p>
+      </div>
+      <div class="conclusion-quote reveal">
+        <p>"You don't change culture by changing minds. You change it by changing structures, behaviours, and daily rituals — then watch the mindset follow."</p>
+      </div>
+      <div class="conclusion-meta reveal">
+        <span>Parag Rahangdale</span>
+        <span>·</span>
+        <span>INSEAD MBA Class 26D</span>
+        <span>·</span>
+        <span>Section A7</span>
+        <span>·</span>
+        <span>OB2 Final Memo</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===========================================
+       SLIDE PRESENTATION CONTROLLER
+       Handles keyboard, touch, scroll, progress, dots
+       =========================================== -->
+  <script>
+    class SlidePresentation {
+      constructor() {
+        this.slides = Array.from(document.querySelectorAll('.slide'));
+        this.currentIndex = 0;
+        this.isScrolling = false;
+        this.progressBar = document.getElementById('progressBar');
+        this.navDotsContainer = document.getElementById('navDots');
+
+        this.setupNavDots();
+        this.setupIntersectionObserver();
+        this.setupKeyboardNav();
+        this.setupTouchNav();
+        this.setupScrollNav();
+        this.updateProgress(0);
+      }
+
+      /* Build nav dots */
+      setupNavDots() {
+        this.navDotsContainer.innerHTML = '';
+        this.slides.forEach((slide, i) => {
+          const btn = document.createElement('button');
+          btn.className = 'nav-dot' + (i === 0 ? ' active' : '');
+          btn.setAttribute('aria-label', `Go to slide ${i + 1}`);
+          btn.addEventListener('click', () => this.goTo(i));
+          this.navDotsContainer.appendChild(btn);
+        });
+        this.dots = Array.from(this.navDotsContainer.querySelectorAll('.nav-dot'));
+      }
+
+      /* Intersection Observer — adds .visible to trigger CSS animations */
+      setupIntersectionObserver() {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              const idx = this.slides.indexOf(entry.target);
+              if (idx !== -1) this.onSlideEnter(idx);
+            }
+          });
+        }, { threshold: 0.55 });
+
+        this.slides.forEach(slide => observer.observe(slide));
+      }
+
+      onSlideEnter(idx) {
+        this.currentIndex = idx;
+        this.updateProgress(idx);
+        this.dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+      }
+
+      updateProgress(idx) {
+        const pct = this.slides.length > 1
+          ? (idx / (this.slides.length - 1)) * 100 : 0;
+        this.progressBar.style.width = pct + '%';
+      }
+
+      goTo(idx) {
+        if (idx < 0 || idx >= this.slides.length) return;
+        this.slides[idx].scrollIntoView({ behavior: 'smooth' });
+      }
+
+      /* Keyboard navigation */
+      setupKeyboardNav() {
+        document.addEventListener('keydown', (e) => {
+          if (e.target.getAttribute('contenteditable')) return;
+          switch (e.key) {
+            case 'ArrowDown':
+            case 'ArrowRight':
+            case ' ':
+            case 'PageDown':
+              e.preventDefault();
+              this.goTo(this.currentIndex + 1);
+              break;
+            case 'ArrowUp':
+            case 'ArrowLeft':
+            case 'PageUp':
+              e.preventDefault();
+              this.goTo(this.currentIndex - 1);
+              break;
+            case 'Home':
+              e.preventDefault();
+              this.goTo(0);
+              break;
+            case 'End':
+              e.preventDefault();
+              this.goTo(this.slides.length - 1);
+              break;
+          }
+        });
+      }
+
+      /* Touch / swipe navigation */
+      setupTouchNav() {
+        let startY = 0;
+        document.addEventListener('touchstart', e => { startY = e.touches[0].clientY; }, { passive: true });
+        document.addEventListener('touchend', e => {
+          const delta = startY - e.changedTouches[0].clientY;
+          if (Math.abs(delta) > 50) this.goTo(this.currentIndex + (delta > 0 ? 1 : -1));
+        }, { passive: true });
+      }
+
+      /* Mouse wheel navigation (throttled) */
+      setupScrollNav() {
+        document.addEventListener('wheel', (e) => {
+          if (this.isScrolling) return;
+          this.isScrolling = true;
+          this.goTo(this.currentIndex + (e.deltaY > 0 ? 1 : -1));
+          setTimeout(() => { this.isScrolling = false; }, 800);
+        }, { passive: true });
+      }
+    }
+
+    // Initialise when DOM is ready
+    document.addEventListener('DOMContentLoaded', () => new SlidePresentation());
+  </script>
+</body>
+</html>
