@@ -58,11 +58,11 @@ Each of these teams was a center of excellence. Individually, they wrote beautif
 
 ### [Slide 6: Architecture Analysis]
 **(2:50 - 4:00 | 70 seconds)**
-"Let’s start with Architecture. Our formal structure was built on deep, functional silos. 
+"Let’s start with Architecture. Our formal structure was built on deep, functional silos without a shared North Star. 
 
-The root cause of our delays was massive 'structural holes' between the four teams. We had no bridging role, no shared planning forum, and no integrated backlog. Engineers were incentivized purely on functional stability within their own domain, not on whether the end-to-end conversion workflow actually succeeded. 
+The absolute root cause of our delays was massive 'structural holes' between the four teams. We did not share a VP. Each team reported up an entirely different chain. To get true alignment on a common goal, decisions technically had to escalate all the way up to the CTO.
 
-Because there was no single Directly Responsible Individual for the cross-team customer outcome, any interface dispute required multi-layer management escalations. A technical disagreement that should have taken an hour to resolve added weeks to our timeline. It was the classic 'blind men and the elephant' problem."
+Meanwhile, execution was happening four levels down from that. Day-to-day work sat with engineers and managers like myself. But because engineers were incentivized strictly on isolated functional stability, any cross-team interface dispute required a multi-layer escalation: from Engineer, to Manager, to Director, to Senior Director, and finally to VP. This sheer vertical distance meant a technical disagreement that should have taken an hour to resolve added weeks to our timeline. It was a classic 'blind men and the elephant' problem."
 
 *(Advance to Slide 7)*
 
