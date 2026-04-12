@@ -70,11 +70,11 @@ Because there was no single Directly Responsible Individual for the cross-team c
 
 ### [Slide 7: Culture Analysis]
 **(4:00 - 5:10 | 70 seconds)**
-"Next, I looked at our Culture. We had inadvertently fostered an environment where 'Silence is Safe.'
+"Next, I looked at our Culture. We had inadvertently fostered an environment of 'Deflection and Blame Shifting.'
 
-During planning, dependencies were rarely surfaced. Teams would discover fundamental network incompatibilities weeks into a sprint, rather than day one. Why? Because implicitly, exposing a dependency on another team signaled weakness—a failure of your own functional independence. 
+Instead of taking joint responsibility, teams actively shifted blame to other functional silos when things failed. A massive avoidance tactic emerged: whenever the Move team highlighted an integration failure, the gatekeeping teams would endlessly demand that we 'reproduce the issue' on our own before they would even look at it. They stalled to delay taking ownership.
 
-Instead of jumping on a quick synchronous call to solve a problem, communication defaulted to asynchronous Jira tickets or sprawling email chains. This defensive behavior wasn't a flaw in our people; it was an ingrained habit. As we learned from the NUMMI case, you cannot change culture by telling people to think differently. You have to change what they do every day."
+Why? Because implicitly, accepting a cross-functional problem damaged your own team's reputation. Deflection wasn't a flaw in our people; it was an ingrained survival habit. As we learned from the NUMMI case, you cannot change culture by telling people to think differently. You have to change what they do every day."
 
 *(Advance to Slide 8)*
 
