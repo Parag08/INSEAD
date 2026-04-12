@@ -110,9 +110,9 @@ And from a Power perspective, we created mutual dependence. We replaced upstream
 **(7:20 - 8:30 | 70 seconds)**
 "Implementing this required a phased approach.
 
-Phase 1 was 'The War Room.' We established cross-functional pilot squads with dedicated representation from all four pillars. No more Jira ping-pong. If you were working on the migration tool, you met synchronously, twice a week, to discuss nothing but system boundaries.
+Phase 1 is 'Building Awareness & Forming Leadership.' We don't just start with engineers; we start at the top. We build awareness across the organization from the CTO, VPs, and Product Managers to ensure this initiative is explicitly prioritized on every single team's roadmap. Only then do we identify and form the cross-functional leadership squad by pulling leads from each of the four teams.
 
-Phase 2 was 'Shared Visualization.' We built a unified dependency dashboard. For the first time, upstream and downstream blockers were visible on one screen. This replaced implicit power with explicit data.
+Phase 2 is 'Shared Visualization.' We built a unified dependency dashboard. For the first time, upstream and downstream blockers were visible on one screen. This replaced implicit power with explicit data.
 
 Phase 3 is 'Institutionalise & Reward.' We revised the incentive structures so that manager performance reviews are strictly tied to cross-functional outcomes, not just local code stability."
 
