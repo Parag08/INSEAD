@@ -673,6 +673,136 @@
     }
 
     /* ===========================================
+       SLIDE 1-B — STAKES (Why now? Burning Platform)
+       =========================================== */
+    .stakes-slide {
+      background: #07090f;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+    .stakes-slide::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 70% 50%, rgba(192,57,43,0.18) 0%, transparent 55%),
+        radial-gradient(ellipse at 20% 80%, rgba(180,83,9,0.12) 0%, transparent 50%);
+      animation: stakesGlow 6s ease-in-out infinite alternate;
+    }
+    @keyframes stakesGlow { from { opacity: 0.7; } to { opacity: 1; } }
+
+    .stakes-layout {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      align-items: center;
+      gap: clamp(1rem, 3vw, 3rem);
+      padding: var(--slide-padding);
+    }
+    .stakes-left {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(0.8rem, 2vh, 1.5rem);
+      border-right: 1px solid rgba(255,255,255,0.08);
+      padding-right: clamp(1rem, 2.5vw, 2.5rem);
+    }
+    .stakes-eyebrow {
+      font-size: var(--label-size);
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #f97316;
+    }
+    .stakes-headline {
+      font-size: clamp(1.5rem, 4vw, 3.2rem);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.05;
+      letter-spacing: -0.025em;
+    }
+    .stakes-headline em { font-style: normal; color: #f97316; }
+    .stakes-sub {
+      font-size: var(--body-size);
+      line-height: 1.6;
+      color: rgba(255,255,255,0.55);
+      max-width: 36ch;
+    }
+    .countdown-block {
+      margin-top: clamp(0.5rem, 1.5vh, 1.2rem);
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+    }
+    .countdown-num {
+      font-size: clamp(4rem, 10vw, 8rem);
+      font-weight: 800;
+      color: #f97316;
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+    .countdown-label {
+      font-size: clamp(0.85rem, 1.4vw, 1.1rem);
+      font-weight: 600;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.35;
+    }
+    .stakes-right {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(0.6rem, 1.5vh, 1.2rem);
+    }
+    .stakes-card {
+      border-radius: 10px;
+      padding: clamp(0.8rem, 2vh, 1.4rem) clamp(0.9rem, 2vw, 1.5rem);
+      border: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      position: relative;
+      overflow: hidden;
+      background: rgba(255,255,255,0.03);
+      transition: border-color 0.3s ease, background 0.3s ease;
+    }
+    .stakes-card:hover {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.18);
+    }
+    .stakes-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      border-radius: 3px 0 0 3px;
+    }
+    .sc-trigger::before  { background: #f97316; }
+    .sc-window::before   { background: #eab308; }
+    .sc-stakes::before   { background: #c0392b; }
+    .stakes-card-label {
+      font-size: var(--label-size);
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    .sc-trigger .stakes-card-label { color: #f97316; }
+    .sc-window  .stakes-card-label { color: #eab308; }
+    .sc-stakes  .stakes-card-label { color: #fca5a5; }
+    .stakes-card-title {
+      font-size: clamp(0.82rem, 1.1vw, 1.05rem);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.25;
+    }
+    .stakes-card-text {
+      font-size: clamp(0.68rem, 0.88vw, 0.85rem);
+      line-height: 1.55;
+      color: rgba(255,255,255,0.52);
+    }
+
+    /* ===========================================
        SLIDE 3 — FOUR TEAMS (Split, table)
        =========================================== */
     .teams-slide {
@@ -1404,11 +1534,54 @@
   </section>
 
   <!-- ==========================================
-       SLIDE 2 — BUSINESS PROBLEM
+       SLIDE 1-B — WHY NOW? THE BURNING PLATFORM
+       ========================================== -->
+  <section class="slide stakes-slide" id="slide-1b" aria-label="Why this was urgent">
+    <div class="slide-header">
+      <span class="slide-num" style="color:rgba(255,255,255,0.3)">02 / 13</span>
+      <span class="section-tag" style="background:#f97316; color:#fff">Stakes</span>
+    </div>
+    <div class="stakes-layout">
+
+      <!-- Left: countdown + headline -->
+      <div class="stakes-left">
+        <div class="stakes-eyebrow reveal">The Burning Platform</div>
+        <div class="stakes-headline reveal">A <em>2-Year Window.</em><br>Miss It, Lose Them Forever.</div>
+        <p class="stakes-sub reveal">Broadcom's acquisition of VMware reset the entire enterprise infrastructure market — and opened a narrow, time-critical window for Nutanix to win.</p>
+        <div class="countdown-block reveal">
+          <div class="countdown-num">2</div>
+          <div class="countdown-label">Years until legacy<br>VMware licences expire</div>
+        </div>
+      </div>
+
+      <!-- Right: three fact cards -->
+      <div class="stakes-right">
+        <div class="stakes-card sc-trigger reveal-left" style="transition-delay:0.1s">
+          <div class="stakes-card-label">The Trigger</div>
+          <div class="stakes-card-title">Broadcom Acquires VMware — and Kills Legacy Pricing</div>
+          <div class="stakes-card-text">Post-acquisition, Broadcom immediately restructured VMware licensing, eliminating perpetual deals and forcing customers onto opaque, expensive subscription bundles.</div>
+        </div>
+        <div class="stakes-card sc-window reveal-left" style="transition-delay:0.25s">
+          <div class="stakes-card-label">The Window</div>
+          <div class="stakes-card-title">2-Year Migration Decision Point</div>
+          <div class="stakes-card-text">Enterprise customers faced a binary choice when their legacy deals expired: absorb Broadcom's new pricing or migrate now to an alternative. This was Nutanix's only window — once decided, customers don't switch again.</div>
+        </div>
+        <div class="stakes-card sc-stakes reveal-left" style="transition-delay:0.4s">
+          <div class="stakes-card-label">The Stakes</div>
+          <div class="stakes-card-title">$50–100M ARR per Deal. Fortune 500 Infrastructure.</div>
+          <div class="stakes-card-text">These were not small accounts — each migration was a Fortune 500 infrastructure contract worth $50–100M ARR. A delayed tool meant customers defaulted back to VMware. There was no second chance.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================
+       SLIDE 3 — BUSINESS PROBLEM
        ========================================== -->
   <section class="slide slide-dark" id="slide-2" aria-label="Business problem">
     <div class="slide-header">
-      <span class="slide-num" style="color:rgba(255,255,255,0.3)">02 / 12</span>
+      <span class="slide-num" style="color:rgba(255,255,255,0.3)">03 / 13</span>
       <span class="section-tag tag-problem">Problem</span>
     </div>
     <div class="slide-content">
