@@ -634,24 +634,43 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 12px;
       padding: clamp(1rem, 2.5vh, 2rem);
-      transition: all 0.4s var(--ease-out-expo);
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
       position: relative;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(0.5rem, 1.2vh, 1rem);
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
     }
     .problem-card:hover {
-      background: rgba(255, 255, 255, 0.05);
-      border-color: rgba(255, 255, 255, 0.3);
       transform: translateY(-5px);
+      border-color: rgba(255,255,255,0.2);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
-    .problem-card::after {
+    
+    /* Shimmer effect for cards */
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    .problem-card::before, .stakes-card::after {
       content: '';
       position: absolute;
-      top: 0; left: 0; width: 100%; height: 3px;
-      background: var(--accent-blue);
-      opacity: 0.5;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent);
+      z-index: 1;
+      pointer-events: none;
+      animation: shimmer 3s infinite;
+    }
+
+    .pc-content { position: relative; z-index: 2; }
+    .pc-label {
+      font-size: var(--small-size);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 0.2rem;
+      position: relative;
+      z-index: 2;
     }
 
     /* Color variants for problem cards */
@@ -2104,6 +2123,32 @@
         this.currentIndex = idx;
         this.updateProgress(idx);
         this.dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+
+        // Trigger counter animation
+        const currentSlide = this.slides[idx];
+        const counters = currentSlide.querySelectorAll('.countdown-num');
+        
+        counters.forEach(counter => {
+          if (!counter.dataset.animated) {
+            const target = parseInt(counter.dataset.target || counter.innerText);
+            if (!isNaN(target)) {
+               counter.dataset.target = target;
+               counter.innerText = '0';
+               let count = 0;
+               const duration = 1000; // ms
+               const stepTime = Math.abs(Math.floor(duration / target));
+               
+               const interval = setInterval(() => {
+                 count++;
+                 counter.innerText = count;
+                 if (count >= target) {
+                   clearInterval(interval);
+                   counter.dataset.animated = 'true';
+                 }
+               }, stepTime);
+            }
+          }
+        });
       }
 
       updateProgress(idx) {
