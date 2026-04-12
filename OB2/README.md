@@ -98,7 +98,7 @@ Because the Core engineers had more referential expertise and structural power, 
 
 Architecturally, we collapsed the timeline. We overlaid a cross-functional 'broker' role—a Product Manager focused strictly on end-to-end integration flow, not feature sets.
 
-Culturally, we had to shift the norm. We implemented a 'Stop-the-line' ritual. If an interface blocker emerged, the entire line paused. We normalized early escalation. 
+Culturally, we had to shift the norm. We implemented a 'Shared Ownership and Quick Collaboration' mechanism. If an interface blocker emerged, team members could trigger an immediate 30-minute synchronous huddle to resolve it collectively. We normalized early escalation instead of deflection.
 
 And from a Power perspective, we created mutual dependence. We replaced upstream/downstream handoffs with a shared integration backlog, breaking the monopoly of the gatekeeper teams."
 
