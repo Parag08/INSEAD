@@ -979,31 +979,49 @@
       overflow: hidden;
     }
 
-    /* Per-dimension ambient hue on analysis right panel */
+    /* Architecture (slide-5): blue ambient glow — overlay only, preserves ar-* dark background */
+    #slide-5 .analysis-right,
+    #slide-5 .analysis-left { position: relative; overflow: hidden; }
+    #slide-5 .analysis-right::after {
+      content: '';
+      position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(ellipse at 80% 30%, rgba(26,86,219,0.12) 0%, transparent 55%),
+                  radial-gradient(ellipse at 20% 80%, rgba(26,86,219,0.07) 0%, transparent 45%);
+    }
+    #slide-5 .analysis-left::after {
+      content: '';
+      position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(ellipse at 5% 50%, rgba(26,86,219,0.09) 0%, transparent 55%);
+    }
 
-    /* Architecture (slide-5): blue */
-    #slide-5 .analysis-right {
-      background: radial-gradient(ellipse at 70% 40%, rgba(26,86,219,0.14) 0%, transparent 60%),
-                  radial-gradient(ellipse at 30% 80%, rgba(26,86,219,0.08) 0%, transparent 50%);
+    /* Culture (slide-6): warm red ambient glow */
+    #slide-6 .analysis-right,
+    #slide-6 .analysis-left { position: relative; overflow: hidden; }
+    #slide-6 .analysis-right::after {
+      content: '';
+      position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(ellipse at 80% 30%, rgba(192,57,43,0.15) 0%, transparent 55%),
+                  radial-gradient(ellipse at 20% 80%, rgba(220,38,38,0.08) 0%, transparent 45%);
     }
-    #slide-5 .analysis-left {
-      background: radial-gradient(ellipse at 0% 50%, rgba(26,86,219,0.1) 0%, transparent 60%), var(--bg-dark);
+    #slide-6 .analysis-left::after {
+      content: '';
+      position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(ellipse at 5% 50%, rgba(192,57,43,0.10) 0%, transparent 55%);
     }
-    /* Culture (slide-6): warm red */
-    #slide-6 .analysis-right {
-      background: radial-gradient(ellipse at 70% 40%, rgba(192,57,43,0.16) 0%, transparent 60%),
-                  radial-gradient(ellipse at 20% 80%, rgba(220,38,38,0.08) 0%, transparent 50%);
+
+    /* Power (slide-7): teal ambient glow */
+    #slide-7 .analysis-right,
+    #slide-7 .analysis-left { position: relative; overflow: hidden; }
+    #slide-7 .analysis-right::after {
+      content: '';
+      position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(ellipse at 80% 30%, rgba(13,148,136,0.15) 0%, transparent 55%),
+                  radial-gradient(ellipse at 20% 80%, rgba(13,148,136,0.08) 0%, transparent 45%);
     }
-    #slide-6 .analysis-left {
-      background: radial-gradient(ellipse at 0% 50%, rgba(192,57,43,0.12) 0%, transparent 60%), var(--bg-dark);
-    }
-    /* Power (slide-7): teal */
-    #slide-7 .analysis-right {
-      background: radial-gradient(ellipse at 70% 40%, rgba(13,148,136,0.16) 0%, transparent 60%),
-                  radial-gradient(ellipse at 20% 80%, rgba(13,148,136,0.08) 0%, transparent 50%);
-    }
-    #slide-7 .analysis-left {
-      background: radial-gradient(ellipse at 0% 50%, rgba(13,148,136,0.12) 0%, transparent 60%), var(--bg-dark);
+    #slide-7 .analysis-left::after {
+      content: '';
+      position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(ellipse at 5% 50%, rgba(13,148,136,0.10) 0%, transparent 55%);
     }
 
     .ar-architecture { background: #111827; }
