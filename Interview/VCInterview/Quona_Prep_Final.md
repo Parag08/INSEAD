@@ -48,10 +48,25 @@ Here is the mapping for the 6 expected questions. Some I have drafted based on y
 ## 4. Build the investment thesis
 *Theme: Quona Alignment / Strategic Thinking*
 
-**Drafted from Quona Research Doc:**
-"My thesis is rooted in a simple operational reality: the marginal cost of building fintech software is trending toward zero with AI. Because code is no longer the differentiator, the critical question in emerging markets is: who actually owns the trust and the distribution?
+**"My investment methodology is rooted in a rigorous three-pillar framework designed to identify structural alpha: technical infrastructure, ground-level distribution reality, and founder conviction."**
 
-This leads directly to my alignment with Quona's B2B infrastructure focus. In high-friction markets, B2C Customer Acquisition Cost (CAC) is often a deal-breaker. The real alpha is in the 'picks and shovels'—enabling existing networks to embed finance (like you did with Twinco Capital or Jai Kisan). It solves the distribution gap while creating sticky revenue. Securing ownership in these infrastructure plays early is the only way to protect target returns before these moats trigger massive valuation reratings."
+*   **1. Technical Diligence & Infrastructure Rigor (The Anchor)**  
+    *   Drawing on my background as an Engineering Team Lead and founding operator, I move past superficial financial models to conduct a forensic audit of the underlying infrastructure.  
+    *   **Technical unit economics:** I analyze the marginal "cost to serve" at the architectural level. For the unbanked, profit hinges on micro-transactions; I evaluate whether API usage and cloud compute are lean enough to preserve margins on sub-$2 flows.  
+    *   **Technical scalability:** I assess whether the tech stack is engineered for millions of users or if it is destined to collapse under technical debt during rapid expansion.  
+    *   **Lean operations:** I prioritize a lean startup culture, seeking teams that manage engineering budgets with precision rather than inflating headcount with venture capital.  
+
+*   **2. The Ground Truth: Distribution, Trust, & Friction**  
+    *   Once the technical foundation is validated, I stress-test the market strategy. My lived experience in cash-dominant environments where informal credit is the norm informs my understanding of the massive barriers to digital adoption.  
+    *   **Value creation:** I require absolute clarity on how the model delivers tangible, defensible value to an inherently skeptical user base.  
+    *   **Establishing trust:** I evaluate how the team institutionalizes trust—whether through embedding into trusted local networks or relying on unsustainable digital acquisition.  
+    *   **Overcoming friction:** I analyze the onboarding funnel against local digital literacy benchmarks; if the initial barrier is too high, the solution is dead on arrival.  
+
+*   **3. The Human Element: Founder Obsession & Fit**  
+    *   As a former founder, I look for a very specific operational DNA that aligns with the "global local" operator-led model.  
+    *   **The Disruptor Mindset:** I seek founders with a relentless, almost unreasonable obsession with the problem space—those with the grit required to reshape ingrained financial behaviors.  
+    *   **Deeply uncomfortable:** I look for founders who are deeply uncomfortable with the status quo, solving problems that represent a personal mission rather than just a market opportunity.  
+    *   **Execution capability:** Beyond empathy, I evaluate the team's raw operational capability and the resilience to execute their vision under extreme market stress.
 
 ---
 
