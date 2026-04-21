@@ -32,13 +32,21 @@ Here is the mapping for the 6 expected questions. Some I have drafted based on y
 ## 3. How will I help Quona Capital in terms of efficiency
 *Theme: Forward-Looking Value Add*
 
-**Tailored Answer (Conversational Points):**
-*   **The Framing:** I see two distinct avenues where I can add immediate value: Deal Flow and Portfolio Operations.
-*   **1. Deal Flow & Diligence:** Having built actual fintech infrastructure under regulatory constraints, I can quickly cut through the noise to evaluate if a target's tech stack is truly scalable.
-*   **2. Hands-on Portfolio Support:**
-    *   I can parachute into a struggling Quona portfolio company as an operational resource.
-    *   I can deploy the exact same AI productivity playbooks I proved at Nutanix to slash their engineering overhead.
-    *   I can sit down with founders to unblock their product roadmaps and refine their GTM strategies to get them to their next liquidity event.
+### **The Thesis: The AI-Driven Lean Organization**
+* **Hyper-Lean Structures:** As AI reshapes the business landscape, future organizations will operate with significantly leaner teams.
+* **High-Leverage Operators:** These teams will require exceptional executors who can leverage AI to multiply their output by 20x, acting as the core engine for building and scaling the company.
+* **Proven Methodology:** This focus on observing internal processes, identifying inefficiencies, and maximizing team output is the exact framework I successfully utilized to enable high efficiency during my previous work at Nutanix.
+
+### **Strategic Action Plan for Quona Capital**
+To apply this "lean and leveraged" thesis to Quona Capital and drive continuous improvement, I will execute a multi-phase operational deep dive:
+* **Process Mapping:** Gain a comprehensive understanding of Quona Capital's end-to-end operations—from deal sourcing to portfolio monitoring—and exactly how the firm functions today.
+* **Workflow & Sentiment Analysis:** Evaluate the day-to-day reality of the team to understand which aspects of their roles they genuinely enjoy and which tasks cause friction or represent "low-value" administrative work.
+* **Friction Identification:** Pinpoint the specific operational overheads, bottlenecks, and manual data-entry burdens currently slowing down the investment and monitoring cycles.
+* **Efficiency Implementation:** Integrate streamlined processes and AI tools that eliminate this friction, effectively boosting the firm's overall organizational bandwidth.
+
+### **The Advantage of Agility**
+* **Execution Feasibility:** Driving foundational operational shifts is notoriously difficult in massive, legacy enterprises.
+* **Quona Capital's Edge:** Because Quona Capital is an agile, mission-driven organization rather than a massive legacy institution, it is uniquely positioned to implement these transformations and realize the benefits of a highly optimized, AI-leveraged operation.
 
 ---
 
