@@ -110,3 +110,20 @@ Quona's own 2024 Impact Report cites companies like Verto and iPiD. By utilizing
 * **Task:** We needed to aggressively improve unit economics and drive global business expansion. It was clear that technical bottlenecks in the checkout flow were directly impacting our conversion rates and stunting growth.
 * **Action:** I partnered directly with the Product team to shift our focus entirely to user value. I led the initiative to completely revamp the checkout architecture. Concurrently, by analyzing user behavior and business needs, we identified a strategic gap and launched a brand new e-commerce platform feature. 
 * **Result:** The operational playbook was a massive success. We saved customers 30 seconds per checkout, which immediately reduced cart abandonment and increased our Average Order Value globally. Furthermore, the new feature launch established an entirely new revenue stream of $25K+ per month, which we successfully rolled out across the United Kingdom.
+
+---
+
+## 9. Questions to Ask Quona (Taka/Elis)
+*Goal: Show strategic depth, operational curiosity, and alignment with their AI focus.*
+
+### **On the AI-Driven Lean Thesis**
+*   "You've mentioned that Generative AI is explicitly reshaping Quona's thesis. Beyond just investing in AI-native fintechs, how much of your current 'Portfolio Operations' is focused on helping legacy portfolio companies restructure into these hyper-lean, AI-leveraged models?"
+*   "With Fund IV now in the early deployment phase, are you seeing a shift in the 'founder archetype' you are backing—moving away from large engineering headcounts toward technical founders who are doubling down on lean, automated execution?"
+
+### **On Operational Value Add**
+*   "I’ve spent the last few years obsessing over 'engineering cost-to-serve.' When a portfolio company is struggling with unit economics, is Quona's approach to parachute in with operational frameworks, or do you prefer to guide them toward the right external partners?"
+*   "How does Quona balance its own 'global-local' distributed model (10+ countries) with the need for internal operational efficiency? Are there specific internal workflows you are currently looking to automate or optimize?"
+
+### **On Success & Growth**
+*   "For someone coming in with a heavy operator and technical background, what would a 'home run' look like for my first 12 months—is success measured more by the precision of my technical diligence or by the tangible efficiency gains I can drive for the firm and its portfolio?"
+*   "In your 'Responsible Exits' framework, how does Quona define a 'successful exit' when a company is highly profitable due to AI automation but perhaps has a different headcount/employment profile than originally envisioned?"
