@@ -1,20 +1,18 @@
 # Everhaus Product Strategy & Lean Startups
 
 **Core Competencies Demonstrated:** Product Strategy, Technical Architecture, Fintech Compliance, Founder Empathy
-**Best Used For:** "What are you doing currently?", "How do you evaluate early-stage startups?", "What's your view on AI's current capabilities for founders?"
+**Best Used For:** "What are you doing at Everhaus?", "Sourcing, Diligence, Investment Thesis, or Exits"
 
 ---
 
 ## 1. Situation (Context)
-I am currently working as a Product Strategy Manager at Everhaus, a fintech platform. My primary role is to bridge the gap between a founder's vision and the technical execution required to bring it to life in a highly regulated industry. 
+I am currently the Product Strategy Manager for EverHaus, a bootstrapped, Singapore-based proptech investment platform. The goal is to democratize access to high-yield real estate renovation projects, which requires a very lean founding team to punch above its weight class.
 
 ## 2. Task (The Challenge)
-Founders come with a business problem, and my job is to design the entire architecture of the company and the product to solve it. Because we operate in fintech, the architecture has to be built from day one to ensure compliance is never an issue, while also designing a product roadmap and Go-To-Market (GTM) strategy that can scale to millions of users. Furthermore, I am actively testing the limits of the "one-person company" or highly lean startup model using modern AI tools.
+I am responsible for owning the product strategy and mapping the long-term Go-To-Market roadmap, ensuring that technical execution directly translates to secure, compliant user value.
 
 ## 3. Action (What YOU Did)
-- **Product & Architecture:** I work directly with founders to define their target customer, shape the platform's user experience, and build the product roadmap. I architect the tech stack to be both scalable and fundamentally secure for financial compliance.
-- **Testing the Solo-Founder Model:** I am personally experimenting with building lean startups using the latest AI tech (like Claude). By building it myself, I gain a grounded, operator-level understanding of how to evaluate other lean startups. 
-- **Evaluating AI Hype:** I map out exactly where AI can accelerate development and where it fails. I apply a critical lens: if a solo founder pitches that their entire fintech backend is effortlessly built and maintained by an LLM, I know from firsthand experience not to believe them—the technology is incredible, but it's not fully autonomous today.
+I deliberately moved away from pure technical architecture to focus entirely on business impact. I utilized AI-driven research to define over 20 core features, allowing us to build rapidly without inflating headcount. Concurrently, I owned the compliance research, making sure that regulatory safeguards were baked into the product roadmap from day one rather than bolted on later.
 
 ## 4. Result (The Outcome)
-I successfully guide fintech founders from raw idea to scalable, compliant platforms. More importantly for a venture context, my hands-on experimentation gives me a highly calibrated BS-detector. I understand exactly how to evaluate a startup's technical feasibility, knowing the precise line between AI reality and AI hype in today's market.
+This holistic approach allowed us to shape a highly efficient platform targeting up to 16% annual returns. For a VC, this experience means I have a highly calibrated BS-detector for startups; I know firsthand how to leverage AI for lean execution and how to ensure technical builds are deeply tied to compliant, scalable business models.

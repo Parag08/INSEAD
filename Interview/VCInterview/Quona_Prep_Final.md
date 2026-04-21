@@ -12,23 +12,20 @@ Here is the mapping for the 6 expected questions. Some I have drafted based on y
 ## 1. What I did in my past organization Nutanix to improve productivity using AI
 *Theme: AI & Productivity / Value Add to the VC firm*
 
-**Tailored Answer (Conversational Points):**
-*   **The Context:** At Nutanix, I led a 12-person engineering team. Management needed execution visibility, but developers naturally resisted the admin overhead of Jira.
-*   **The Approach (Enablement & Automation):**
-    *   *AI Enablement:* Secured budget for AI coding tools. I rigorously used them myself first so I wasn't "delusional" about their true limits and could guide realistic adoption.
-    *   *Process Automation:* Built a tool linking code commits directly to Jira. It auto-created and updated tickets without developer input.
-*   **The ROI:** Slashed project tracking time by **80%** and boosted team coding productivity by **30%**. It taught me how to turn AI hype into measurable operational efficiency.
+* **Situation:** While leading engineering at Nutanix, I managed a team of 11+ developers and oversaw a $500K budget. Leadership needed clear visibility into execution, but the development team naturally resisted the administrative overhead of manual Jira updates, creating a bottleneck. 
+* **Task:** I needed to bridge this gap by driving operational efficiency without burning out the team. It was crucial to approach this problem embodying our core values—being hungry to improve, humble in listening to developer pain points, and honest with heart regarding the changes needed.
+* **Action:** Rather than enforcing top-down administrative mandates, I focused on cross-functional enablement. I secured the budget for AI coding tools and rigorously tested them myself to understand their realistic limits. Then, I built an automated workflow linking code commits directly to Jira, completely removing the developer input requirement. Furthermore, I collaborated directly with Sales to ensure our newly optimized engineering cycles were pointed squarely at high-impact, customer-driven features. 
+* **Result:** The shift from administrative oversight to automated enablement delivered 50% fewer meetings and 20% faster product cycles. By focusing our accelerated output entirely on user value, this strategic alignment enabled $40-50M in Annual Contract Value.
 
 ---
 
 ## 2. What am I doing at Everhaus
 *Theme: Sourcing, Diligence, Investment Thesis, or Exits*
 
-**Tailored Answer (Conversational Points):**
-*   **The Role:** As a Product Strategy Manager, I bridge the founder's vision with hardcore technical execution.
-*   **The Execution:** I design scalable fintech architectures where compliance is securely baked in from day one, while mapping out their long-term Go-To-Market strategy.
-*   **Testing AI Boundaries:** I'm actively experimenting with the "one-person company" model by building lean products myself using tools like Claude.
-*   **The Pitch for VC:** This hands-on building gives me a highly calibrated BS-detector. If a solo founder claims an LLM is seamlessly running their entire backend, I know firsthand what is actually viable versus what is just AI marketing.
+* **Situation:** I am currently the Product Strategy Manager for EverHaus, a bootstrapped, Singapore-based proptech investment platform. The goal is to democratize access to high-yield real estate renovation projects, which requires a very lean founding team to punch above its weight class.
+* **Task:** I am responsible for owning the product strategy and mapping the long-term Go-To-Market roadmap, ensuring that technical execution directly translates to secure, compliant user value.
+* **Action:** I deliberately moved away from pure technical architecture to focus entirely on business impact. I utilized AI-driven research to define over 20 core features, allowing us to build rapidly without inflating headcount. Concurrently, I owned the compliance research, making sure that regulatory safeguards were baked into the product roadmap from day one rather than bolted on later.
+* **Result:** This holistic approach allowed us to shape a highly efficient platform targeting up to 16% annual returns. For a VC, this experience means I have a highly calibrated BS-detector for startups; I know firsthand how to leverage AI for lean execution and how to ensure technical builds are deeply tied to compliant, scalable business models.
 
 ---
 
@@ -73,13 +70,10 @@ Here is the mapping for the 6 expected questions. Some I have drafted based on y
 ## 5. My experience with the blockchain
 *Theme: Technical Diligence & Infrastructure Specs*
 
-**Raw Story Prompt (Please fill in):**
-- **Situation:** Where were you working and what was the macroeconomic/business context?
-- **Task:** Why did the business need a blockchain solution instead of a traditional database?
-- **Action:** What exactly did you build or evaluate? (Smart contracts? L2 integrations?)
-- **Result:** What was the outcome? 
-
-*Type your raw bullet points here...*
+* **Situation:** As a founding member and Blockchain Developer at Eleven01, we were tasked with providing scalable, secure decentralized solutions for enterprise businesses. 
+* **Task:** The business required a robust, foundational MVP that could handle enterprise demands better than a traditional database. I needed to build this from the ground up while simultaneously scaling the technical organization.
+* **Action:** I architected the foundational blockchain MVP and defined the strategic product roadmap. To ensure we could execute, I led a 10+ member cross-functional team. Instead of just focusing on the code, I established the core cultural values and operational standards necessary for the technical team to scale and focus on delivering tangible differentiation.
+* **Result:** By aligning our technical architecture directly with our business objectives, we successfully developed multiple differentiating features for the blockchain. This execution culminated in a successful Initial Coin Offering (ICO), proving my ability to take complex, frontier infrastructure and drive it to a major liquidity milestone.
 
 ---
 
@@ -104,15 +98,7 @@ Quona's own 2024 Impact Report cites companies like Verto and iPiD. By utilizing
 ## 8. Operational Value Add for Portfolio Companies (Added from Email Analysis)
 *Theme: Value add to Quona / Supporting Founders*
 
-**Raw Story Prompt (Please fill in):**
-- **Situation:** When has a company or project you were advising/working on struggled with product-market fit or unit economics?
-- **Task:** How did you help them pivot or prepare for their next stage (e.g., scale or acquisition)?
-- **Action:** What operational playbook did you use? (Give a specific everhaus or Nutanix example of turning something around or driving it to completion).
-- **Result:** What was the outcome?
-
-*Type your raw bullet points here...*
-
----
-
-### Action Required:
-Please fill in the **Raw Story Prompts** for #1, #2, #5, and #8. Once added, I will format them into beautiful STAR stories, add them to your Master Datastore, and finalize this prep document!
+* **Situation:** During my time at Touchnote, a UK-based e-commerce gifting platform, the business was facing significant friction at a critical user touchpoint. 
+* **Task:** We needed to aggressively improve unit economics and drive global business expansion. It was clear that technical bottlenecks in the checkout flow were directly impacting our conversion rates and stunting growth.
+* **Action:** I partnered directly with the Product team to shift our focus entirely to user value. I led the initiative to completely revamp the checkout architecture. Concurrently, by analyzing user behavior and business needs, we identified a strategic gap and launched a brand new e-commerce platform feature. 
+* **Result:** The operational playbook was a massive success. We saved customers 30 seconds per checkout, which immediately reduced cart abandonment and increased our Average Order Value globally. Furthermore, the new feature launch established an entirely new revenue stream of $25K+ per month, which we successfully rolled out across the United Kingdom.
